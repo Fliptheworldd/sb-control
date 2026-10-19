@@ -1,0 +1,1 @@
+PASS compiled Flutter web: device permanent boost, visualization, reset cancel/confirm, target, heat, units, five profiles, pump, diagnosis, 320px, disconnect. No JS errors, failed requests or external requests.

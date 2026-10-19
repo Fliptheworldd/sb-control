@@ -4,6 +4,8 @@ Native Flutter-App für iOS und Android auf Basis des gelieferten Quellcodes v0.
 
 **Implementiert und in Simulation getestet. Kein physisches Gerät wurde getestet.** Bluetooth-Befehle sind gegen die öffentliche STORZ & BICKEL Web-App v3.4.1 geprüft. Das ist keine Herstellerfreigabe oder Garantie für alle Firmwarestände.
 
+**iPhone-Testbuild erfolgreich erstellt:** Release für echte iPhones, Version 0.3.2 (5), noch unsigniert. [Build-Nachweis](docs/IOS_BUILD_RESULT.md) · [Installation über Windows](docs/IPHONE_WINDOWS.md).
+
 ## Neu in 0.3.2
 
 Konfiguration direkt am Gerät: Boost-/Superboost-Aufschläge, Permanent Boost (90-Sekunden-Rücksprung deaktivieren), Boost-Anzeige und bestätigter Einstellungen-Reset für VENTY/VEAZY. Die doppelten lokalen App-Boost-Stufen aus 0.3.1 wurden entfernt. Beim Verbinden werden vorhandene Gerätewerte gelesen, nicht mit App-Vorgaben überschrieben. „Aufheizen“ bleibt als optionale direkte Bedienung erhalten.

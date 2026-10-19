@@ -10,11 +10,12 @@ Stand 19.10.2026, Flutter 3.35.3 / Dart 3.9.2.
 | Statische Analyse | Keine Probleme |
 | Formatprüfung | 16 Dateien, keine Änderungen |
 | Flutter Web Release | Erfolgreich kompiliert |
+| iOS Release für physische iPhones, ohne Signierung | GitHub Actions erfolgreich; siehe [Build-Nachweis](IOS_BUILD_RESULT.md) |
 | Browserprüfung | Permanent Boost, Anzeige, Reset abbrechen/bestätigen sowie bisherige Bedienung bestanden |
 
 Die neuen Tests prüfen Firmwarefreigaben, verkürzte Antworten, Konfiguration ohne Aufheizen, Reconnect ohne Konfigurationswrite, simulierte Gerätespeicherung, beide Anzeige-Polaritäten und Reset-Sperre bei eingeschaltetem Aufheizen. Layouts bei 320/390 Pixeln bleiben geprüft. Der Diagnose-Test scrollt nun zu den zusätzlichen Informationen. Der Browserlauf enthält keine JS-Fehler, fehlgeschlagenen oder externen Requests.
 
-Aktuelle Protokolle: `docs/test-results/device-*`. Ältere Protokolle und Berichte unten sind historisch. Native Android-/iOS-Builds, physisches BLE, Neustart-Persistenz und reale 90-Sekunden-Abläufe **nicht getestet**. Siehe HARDWARE_TESTS.md und DEVICE_SETTINGS.md.
+Aktuelle Protokolle: `docs/test-results/device-*`. Ältere Protokolle und Berichte unten sind historisch. Nativer iOS-Releasebuild erfolgreich; Analyse und 10 Fluttertests auch auf macOS bestanden. Android-Build, Installation auf einem iPhone, physisches BLE, Neustart-Persistenz und reale 90-Sekunden-Abläufe **nicht getestet**. Siehe HARDWARE_TESTS.md und DEVICE_SETTINGS.md.
 
 ## Historischer Testbericht · SB CONTROL 0.3.1
 

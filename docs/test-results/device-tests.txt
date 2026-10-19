@@ -1,0 +1,12 @@
+00:00 +0: loading /workspace/scratch/d0306b87c408/boost-update/sb_control/test/controller_test.dart
+00:00 +0: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/controller_test.dart: all five device profiles support a complete simulated session
+00:00 +1: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/controller_test.dart: all five device profiles support a complete simulated session
+00:00 +2: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +3: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +4: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +5: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +6: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +7: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +8: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:03 +9: /workspace/scratch/d0306b87c408/boost-update/sb_control/test/widget_test.dart: native entry screen and navigation remain usable at 390px
+00:03 +10: All tests passed!
