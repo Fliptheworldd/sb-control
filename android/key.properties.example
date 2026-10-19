@@ -1,0 +1,5 @@
+# Copy to key.properties and fill locally. Never commit your keys or passwords.
+storeFile=/absolute/path/to/sb-control-upload.jks
+storePassword=REPLACE_LOCALLY
+keyAlias=sb-control-upload
+keyPassword=REPLACE_LOCALLY

@@ -1,0 +1,5 @@
+Add these keys to the generated ios/Runner/Info.plist:
+<key>NSBluetoothAlwaysUsageDescription</key>
+<string>Bluetooth wird benötigt, um kompatible Geräte in deiner Nähe zu finden und zu verbinden.</string>
+<key>NSBluetoothPeripheralUsageDescription</key>
+<string>Bluetooth wird für die Verbindung mit kompatiblen Geräten benötigt.</string>

@@ -1,0 +1,13 @@
+name: vapor_control
+description: Independent Bluetooth device companion
+publish_to: none
+version: 0.2.0+2
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_blue_plus: ^1.35.5
+  permission_handler: ^11.3.1
+flutter:
+  uses-material-design: true

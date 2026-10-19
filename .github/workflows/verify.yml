@@ -1,0 +1,30 @@
+name: Verify Flutter
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.3'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: git diff --exit-code -- pubspec.lock
+      - run: dart format --output=none --set-exit-if-changed lib test tool
+      - run: dart run tool/check_core.dart
+      - run: flutter analyze
+      - run: flutter test --reporter expanded
+      - run: flutter build web --release --no-web-resources-cdn --pwa-strategy=none --dart-define=SB_DEMO=true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sb-control-flutter-web-demo
+          path: build/web/
+          retention-days: 14

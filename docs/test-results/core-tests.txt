@@ -1,0 +1,50 @@
+PASS vendor bytes q.target185
+PASS vendor bytes q.boost15
+PASS vendor bytes q.superboost20
+PASS vendor bytes q.heatOn
+PASS vendor bytes q.heatOff
+PASS vendor bytes q.brightness7
+PASS vendor bytes q.vibrationOn
+PASS vendor bytes crafty.target185
+PASS vendor bytes crafty.boost15
+PASS vendor bytes crafty.heatOn
+PASS vendor bytes crafty.heatOff
+PASS vendor bytes hybrid.target185
+PASS vendor bytes hybrid.heatOn
+PASS vendor bytes hybrid.heatOff
+PASS vendor bytes hybrid.pumpOn
+PASS vendor bytes hybrid.pumpOff
+PASS reject excessive QVAP temperature
+PASS reject excessive HYBRID temperature
+PASS reject low CRAFTY+ temperature
+PASS reject zero boost
+PASS reject truncated status
+PASS reject truncated firmware
+PASS reject truncated uint16
+PASS name does not authorize control
+PASS shared service does not infer model
+PASS VENTY advertising identity
+PASS VEAZY advertising identity
+PASS HYBRID service identity
+PASS firmware boundary
+PASS unknown firmware blocked
+PASS bootloader blocked
+PASS invalid application blocked
+PASS application mode recognized
+PASS sentinel is not a sensor temperature
+PASS countdown is sum, not uint16
+PASS invalid battery rejected
+PASS CRAFTY Fahrenheit read quirk
+PASS CRAFTY protected write sequence
+PASS preserve unrelated register bits
+PASS no speculative VENTY permanent Bluetooth
+PASS queue waits for in-flight request
+PASS GATT operations serialized
+PASS queued command cancelled by disconnect
+PASS demo profile demo-venty
+PASS demo profile demo-veazy
+PASS demo profile demo-crafty
+PASS demo profile demo-craftyPlus
+PASS demo profile demo-volcanoHybrid
+
+48 core checks passed. No hardware involved.

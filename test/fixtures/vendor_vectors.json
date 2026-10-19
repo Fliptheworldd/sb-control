@@ -1,0 +1,625 @@
+{
+  "description": "Byte vectors executed from public manufacturer UI functions with mocked GATT; not hardware captures.",
+  "retrieved": "2026-10-19",
+  "sources": [
+    {
+      "file": "main.js",
+      "url": "https://app.storz-bickel.com/js/main.js",
+      "sha256": "3238eb8387094f889f6c74335f175801946d7606158dc3b63d1727580848431c"
+    },
+    {
+      "file": "qvap.js",
+      "url": "https://app.storz-bickel.com/js/qvap.js",
+      "sha256": "e609dee31de7a50c9a3fa668bc41e23062b52969f4094832b8dcfba609fbd093"
+    },
+    {
+      "file": "crafty.js",
+      "url": "https://app.storz-bickel.com/js/crafty.js",
+      "sha256": "24da328e39bab2c50cb5369d1d7eed3a20e89f4e359738792a0107480a0c7cac"
+    },
+    {
+      "file": "volcano.js",
+      "url": "https://app.storz-bickel.com/js/volcano.js",
+      "sha256": "4a9a03994fb77bdc0c0fbac9b5ef4412c36bb1fd15926343cc25e3cc54e354b5"
+    }
+  ],
+  "vectors": [
+    {
+      "case": "q.target185",
+      "source": "qvap.js",
+      "function": "writeSollTemperatureQVap",
+      "args": [
+        185
+      ],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            2,
+            0,
+            0,
+            58,
+            7,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.boost15",
+      "source": "qvap.js",
+      "function": "writeBoostTemperatureQVap",
+      "args": [
+        15
+      ],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            4,
+            0,
+            0,
+            0,
+            0,
+            15,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.superboost20",
+      "source": "qvap.js",
+      "function": "writeSuperBoostTemperatureQVap",
+      "args": [
+        20
+      ],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            8,
+            0,
+            0,
+            0,
+            0,
+            0,
+            20,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.heatOn",
+      "source": "qvap.js",
+      "function": "onHeatClickQvap",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            32,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.heatOff",
+      "source": "qvap.js",
+      "function": "onHeatClickQvap",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            32,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.brightness7",
+      "source": "qvap.js",
+      "function": "writeBrightnessQvap",
+      "args": [
+        7
+      ],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            6,
+            1,
+            7,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.vibrationOn",
+      "source": "qvap.js",
+      "function": "vibrationToggleHandlerQvap",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            6,
+            8,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.permanentBoost.true",
+      "source": "qvap.js",
+      "function": "boostSuperboostTimeoutFuncQvap",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            6,
+            16,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.visualization.venty.true",
+      "source": "qvap.js",
+      "function": "boostVisualizationFunc",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            64,
+            64,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.visualization.veazy.true",
+      "source": "qvap.js",
+      "function": "boostVisualizationFunc",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            64,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.permanentBoost.false",
+      "source": "qvap.js",
+      "function": "boostSuperboostTimeoutFuncQvap",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            6,
+            16,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.visualization.venty.false",
+      "source": "qvap.js",
+      "function": "boostVisualizationFunc",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            64,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.visualization.veazy.false",
+      "source": "qvap.js",
+      "function": "boostVisualizationFunc",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            64,
+            64,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.reset",
+      "source": "qvap.js",
+      "function": "startFactoryResetFuncQVap",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            1,
+            128,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            4,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "q.analysis",
+      "source": "qvap.js",
+      "function": "startAnalysisQvapFunc",
+      "args": [],
+      "writes": [
+        {
+          "id": "qvap",
+          "bytes": [
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "crafty.target185",
+      "source": "crafty.js",
+      "function": "writeSollTemperatureCrafty",
+      "args": [
+        185
+      ],
+      "writes": [
+        {
+          "id": "crafty.target",
+          "bytes": [
+            58,
+            7
+          ]
+        },
+        {
+          "id": "crafty.boost",
+          "bytes": [
+            150,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "crafty.boost15",
+      "source": "crafty.js",
+      "function": "writeBoostTemperatureCrafty",
+      "args": [
+        15
+      ],
+      "writes": [
+        {
+          "id": "crafty.boost",
+          "bytes": [
+            150,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "crafty.heatOn",
+      "source": "crafty.js",
+      "function": "onHeatClickCrafty",
+      "args": [],
+      "writes": [
+        {
+          "id": "crafty.on",
+          "bytes": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "crafty.heatOff",
+      "source": "crafty.js",
+      "function": "onHeatClickCrafty",
+      "args": [],
+      "writes": [
+        {
+          "id": "crafty.off",
+          "bytes": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "hybrid.target185",
+      "source": "volcano.js",
+      "function": "writeSollTemperatureHybrid",
+      "args": [
+        185
+      ],
+      "writes": [
+        {
+          "id": "hybrid.target",
+          "bytes": [
+            58,
+            7,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "hybrid.heatOn",
+      "source": "volcano.js",
+      "function": "onHeatClickVolcano",
+      "args": [],
+      "writes": [
+        {
+          "id": "hybrid.on",
+          "bytes": [
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "hybrid.heatOff",
+      "source": "volcano.js",
+      "function": "onHeatClickVolcano",
+      "args": [],
+      "writes": [
+        {
+          "id": "hybrid.off",
+          "bytes": [
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "hybrid.pumpOn",
+      "source": "volcano.js",
+      "function": "onAirClickVolcano",
+      "args": [],
+      "writes": [
+        {
+          "id": "hybrid.pumpOn",
+          "bytes": [
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "case": "hybrid.pumpOff",
+      "source": "volcano.js",
+      "function": "onAirClickVolcano",
+      "args": [],
+      "writes": [
+        {
+          "id": "hybrid.pumpOff",
+          "bytes": [
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

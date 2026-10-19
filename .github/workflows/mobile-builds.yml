@@ -1,0 +1,58 @@
+name: Mobile development builds
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Build target (no publishing or signing secrets)
+        required: true
+        default: both
+        type: choice
+        options: [both, android, ios]
+permissions:
+  contents: read
+jobs:
+  android:
+    if: inputs.platform == 'both' || inputs.platform == 'android'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.3'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart run tool/check_core.dart
+      - run: flutter test
+      - run: flutter build apk --debug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sb-control-android-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 14
+  ios:
+    if: inputs.platform == 'both' || inputs.platform == 'ios'
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.3'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart run tool/check_core.dart
+      - run: flutter test
+      - run: flutter build ios --simulator --debug --no-codesign
+      - run: ditto -c -k --sequesterRsrc --keepParent build/ios/iphonesimulator/Runner.app build/ios/sb-control-simulator.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sb-control-ios-simulator
+          path: build/ios/sb-control-simulator.zip
+          retention-days: 14

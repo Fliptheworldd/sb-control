@@ -1,0 +1,10 @@
+00:00 +0: loading <project>/test/controller_test.dart
+00:00 +0: <project>/test/controller_test.dart: all five device profiles support a complete simulated session
+00:00 +1: <project>/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +2: <project>/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +3: <project>/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +4: <project>/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +5: <project>/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:01 +6: <project>/test/widget_test.dart: all connected layouts fit at 320px, including Fahrenheit
+00:02 +7: <project>/test/widget_test.dart: native entry screen and navigation remain usable at 390px
+00:02 +8: All tests passed!
