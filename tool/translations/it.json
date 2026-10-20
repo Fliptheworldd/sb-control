@@ -352,5 +352,16 @@
   "Weiter": "Avanti",
   "ZIELTEMPERATUR": "TEMPERATURA IMPOSTATA",
   "AUSTAUSCHEN": "SOSTITUIRE",
-  "Version 0.5.0 · Entwicklungsstand": "Versione 0.5.0 · Build di sviluppo"
+  "Version 0.5.0 · Entwicklungsstand": "Versione 0.5.0 · Build di sviluppo",
+  "Boost": "Boost",
+  "Superboost": "Superboost",
+  "DEIN BOOST": "IL TUO BOOST",
+  "Auf Gerät speichern": "Salva sul dispositivo",
+  "Wird gespeichert…": "Salvataggio…",
+  "Vom Gerät bestätigt": "Confermato dal dispositivo",
+  "Änderungen nicht gespeichert": "Modifiche non salvate",
+  "Werte vom Gerät geladen": "Valori letti dal dispositivo",
+  "Boost reduzieren: maximal 210 °C am Gerät.": "Riduci Boost: temperatura massima 210 °C.",
+  "Nach dem Speichern aktivierst du Boost direkt über die Gerätetaste.": "Dopo aver salvato, attiva Boost dal pulsante del vaporizzatore.",
+  "Version 0.6.0 · Entwicklungsstand": "Versione 0.6.0 · Build di sviluppo"
 }

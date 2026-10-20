@@ -245,8 +245,8 @@ abstract final class L {
       ? "Esplora tutte le schermate senza hardware."
       : "Ohne Hardware alle Ansichten ausprobieren.";
   static const s111 = italian
-      ? "Gli incrementi vengono salvati nel dispositivo. Attiva Boost con il pulsante del vaporizzatore."
-      : "Offsets werden am Gerät gespeichert. Boost aktivierst du über die Gerätetaste.";
+      ? "Dopo aver salvato, attiva Boost dal pulsante del vaporizzatore."
+      : "Nach dem Speichern aktivierst du Boost direkt über die Gerätetaste.";
   static const s112 = italian
       ? "Feedback del dispositivo"
       : "Rückmeldung des Geräts";
@@ -750,7 +750,7 @@ abstract final class L {
   static const s317 = italian ? "Pronto" : "Bereit";
   static const s318 = italian ? "Utilizzo" : "Betriebszeit";
   static const s319 = italian ? "Servizi Bluetooth" : "Bluetooth-Dienste";
-  static const s320 = italian ? "Boost" : "Boost-Offset";
+  static const s320 = italian ? "Boost" : "Boost";
   static const s321 = italian ? "Origine dati" : "Datenquelle";
   static const s322 = italian ? "Modalità demo" : "Demo-Modus";
   static const s323 = italian ? "Diagnostica" : "Diagnose";
@@ -775,7 +775,7 @@ abstract final class L {
   static const s338 = italian ? "Numero di serie" : "Seriennummer";
   static const s339 = italian ? "Simulazione" : "Simulation";
   static const s340 = italian ? "Salva" : "Speichern";
-  static const s341 = italian ? "Superboost" : "Superboost-Offset";
+  static const s341 = italian ? "Superboost" : "Superboost";
   static const s342 = italian ? "Unità di temperatura" : "Temperatureinheit";
   static const s343 = italian ? "Rinomina" : "Umbenennen";
   static const s344 = italian ? "Sconosciuto" : "Unbekannt";
@@ -788,6 +788,23 @@ abstract final class L {
   static const s351 = italian ? "TEMPERATURA IMPOSTATA" : "ZIELTEMPERATUR";
   static const s352 = italian ? "SOSTITUIRE" : "AUSTAUSCHEN";
   static const s353 = italian
-      ? "Versione 0.5.0 · Build di sviluppo"
-      : "Version 0.5.0 · Entwicklungsstand";
+      ? "Versione 0.6.0 · Build di sviluppo"
+      : "Version 0.6.0 · Entwicklungsstand";
+  static const boostProfile = italian ? 'IL TUO BOOST' : 'DEIN BOOST';
+  static const boostSave = italian
+      ? 'Salva sul dispositivo'
+      : 'Auf Gerät speichern';
+  static const boostSaving = italian ? 'Salvataggio…' : 'Wird gespeichert…';
+  static const boostSaved = italian
+      ? 'Confermato dal dispositivo'
+      : 'Vom Gerät bestätigt';
+  static const boostPending = italian
+      ? 'Modifiche non salvate'
+      : 'Änderungen nicht gespeichert';
+  static const boostLoaded = italian
+      ? 'Valori letti dal dispositivo'
+      : 'Werte vom Gerät geladen';
+  static const boostInvalid = italian
+      ? 'Riduci Boost: temperatura massima 210 °C.'
+      : 'Boost reduzieren: maximal 210 °C am Gerät.';
 }

@@ -1,5 +1,8 @@
 # 0.5.0 — dashboard and Italian Android build
 
+Historical record. Version 0.6.0 replaces the device illustrations and immediate
+Boost writes; see [UX_060.md](UX_060.md).
+
 The temperature page now contains the existing device-stored Boost and Superboost
 increment sliders. Firmware gates, range checks, serialized BLE writes and readback
 confirmation remain in AppController. This redesign does not invent an activation

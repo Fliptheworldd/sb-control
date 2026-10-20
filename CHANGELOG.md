@@ -1,5 +1,18 @@
 # Änderungen
 
+## 0.6.0 — 20.10.2026
+
+- Originale S&B-Produktfotos statt generierter Gerätebilder. Quellen und Bild-Hashes dokumentiert.
+- Explizites gemeinsames Speichern der Boost-Aufschläge mit Geräterückmeldung, Entwurfsanzeige und 1-°C-Tasten. Keine neuen Protokollbefehle.
+- Automatischer Wechsel zur Steuerung nach Verbinden und Wiederverbinden; vorhandene Verbindung weiterverwenden.
+- Demo-Zugänge aus nativen Apps entfernt. Simulation bleibt ausschließlich internes Testwerkzeug.
+- Matteo-Zeile ausschließlich im ausdrücklich markierten italienischen Android-Build, durch Plattform- und Sprachtests abgesichert.
+
+## 0.5.0 — 20.10.2026
+
+- Neues Dashboard, App-Icon und italienische Android-Fassung.
+- Erfolgreiche Android-/iPhone-CI-Builds vom selben Commit; Details in der GitHub-PR-Historie.
+
 ## 0.4.0 — 20.10.2026
 
 - Offline-Pflegebereich mit schematischen Bildkarten für VENTY, VEAZY, CRAFTY, CRAFTY+ und VOLCANO HYBRID.

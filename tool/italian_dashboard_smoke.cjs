@@ -60,7 +60,14 @@ const assert = require('node:assert/strict');
     await snap('dashboard-italiano');
     await page.mouse.move(180, 500); await page.mouse.wheel(0, 250);
     await button('Riscalda').waitFor();
+    await page.waitForTimeout(650);
+    await button('Boost +1 °C').click();
+    await page.mouse.wheel(0, 230);
+    await page.waitForTimeout(650);
+    await button('Salva sul dispositivo').click();
+    await page.getByRole('group', {name: /Confermato dal dispositivo/}).waitFor();
     await snap('boost-italiano');
+    await page.mouse.wheel(0, -230);
     await button('Riscalda').click();
     await button('Arresta riscaldamento').waitFor();
     for (const name of ['VEAZY', 'CRAFTY', 'CRAFTY+', 'VOLCANO HYBRID']) {
@@ -74,6 +81,6 @@ const assert = require('node:assert/strict');
     await snap('hybrid-320-italiano');
     assert.deepEqual(errors, []); assert.deepEqual(failed, []);
     assert.deepEqual(remote, []); assert.deepEqual(badResponses, []);
-    console.log('PASS Italian compiled dashboard: heat action, five model illustrations, 320px, no network errors.');
+    console.log('PASS Italian compiled dashboard: explicit Boost save/readback, heat action, five original model photos, 320px, no network errors.');
   } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

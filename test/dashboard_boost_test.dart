@@ -6,7 +6,7 @@ import 'package:sb_control/bluetooth/demo_transport.dart';
 import 'package:sb_control/ui/app.dart';
 
 void main() {
-  testWidgets('dashboard edits device boost without starting heat', (
+  testWidgets('boost drafts require save and verified device readback', (
     tester,
   ) async {
     final c = AppController(
@@ -25,10 +25,10 @@ void main() {
     await tester.pumpWidget(SbControlApp(controller: c));
     await tester.pumpAndSettle();
     final boost = find.byWidgetPredicate(
-      (w) => w is SettingSlider && w.label == 'Boost-Offset',
+      (w) => w is SettingSlider && w.label == 'Boost',
     );
     final superboost = find.byWidgetPredicate(
-      (w) => w is SettingSlider && w.label == 'Superboost-Offset',
+      (w) => w is SettingSlider && w.label == 'Superboost',
     );
     expect(boost, findsOneWidget);
     expect(superboost, findsOneWidget);
@@ -42,7 +42,16 @@ void main() {
     for (var n = 0; n < 100; n++) {
       await tester.pump(const Duration(milliseconds: 20));
     }
+    expect(c.data['boost'], before, reason: 'Dragging edits only a draft');
+    expect(find.text('Änderungen nicht gespeichert'), findsOneWidget);
+    await tester.ensureVisible(find.byKey(const ValueKey('save-boost')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('save-boost')));
+    for (var n = 0; n < 100; n++) {
+      await tester.pump(const Duration(milliseconds: 20));
+    }
     expect(c.data['boost'], isNot(before));
+    expect(find.text('Vom Gerät bestätigt'), findsOneWidget);
     expect(c.data['heater'], false);
     expect(c.error, isEmpty);
     await tester.pumpWidget(const SizedBox.shrink());

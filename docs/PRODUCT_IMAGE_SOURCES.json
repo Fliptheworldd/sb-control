@@ -1,0 +1,47 @@
+[
+  {
+    "model": "venty",
+    "asset": "assets/devices/venty.jpg",
+    "source": "https://www.storz-bickel.com/media/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/v/e/venty_0_1.jpg",
+    "page": "https://www.storz-bickel.com/en/venty",
+    "retrieved": "2026-10-20",
+    "sha256": "a7e13b9280209cac180b2f3bea0f5895b8b59628e4430f1502ca2e0fa084d9c9",
+    "transformation": "None; original downloaded JPEG bytes. Flutter crops only whitespace in presentation."
+  },
+  {
+    "model": "veazy",
+    "asset": "assets/devices/veazy.jpg",
+    "source": "https://www.storz-bickel.com/media/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/0/1/01_00_01_black.jpg",
+    "page": "https://www.storz-bickel.com/en/veazy",
+    "retrieved": "2026-10-20",
+    "sha256": "dbe2bd4d5e9c819db82cb491b524f7cacea9672651e6b40e678d950cfe3f0b21",
+    "transformation": "None; original downloaded JPEG bytes. Flutter crops only whitespace in presentation."
+  },
+  {
+    "model": "crafty",
+    "asset": "assets/devices/crafty.jpg",
+    "source": "https://app.storz-bickel.com/img/img-cy.jpg",
+    "page": "https://app.storz-bickel.com/",
+    "retrieved": "2026-10-20",
+    "sha256": "733aef93e41f94fec912d33d700fc4b590d968eea0d5f92fee7f7ae542dcc65b",
+    "transformation": "None; original downloaded JPEG bytes. Flutter crops only whitespace in presentation."
+  },
+  {
+    "model": "craftyPlus",
+    "asset": "assets/devices/craftyPlus.jpg",
+    "source": "https://www.storz-bickel.com/media/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/c/r/crafty_front_view_on_temperature.jpg",
+    "page": "https://www.storz-bickel.com/en/crafty-plus-c",
+    "retrieved": "2026-10-20",
+    "sha256": "c535cd3188787ac7086c0b5c64d314f97ebe9e467f1d8f9d7fb812fa313946d9",
+    "transformation": "None; original downloaded JPEG bytes. Flutter crops only whitespace in presentation."
+  },
+  {
+    "model": "volcanoHybrid",
+    "asset": "assets/devices/volcanoHybrid.jpg",
+    "source": "https://www.storz-bickel.com/media/catalog/product/cache/74c1057f7991b4edb2bc7bdaa94de933/v/o/volcano_hybrid_silver_0.jpg",
+    "page": "https://www.storz-bickel.com/en/volcanohybrid",
+    "retrieved": "2026-10-20",
+    "sha256": "52fdfb37cddc26338c1fd39fab3b78a878aa0b0761bd0c3550e469a387e79c07",
+    "transformation": "None; original downloaded JPEG bytes. Flutter crops only whitespace in presentation."
+  }
+]

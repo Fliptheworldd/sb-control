@@ -37,8 +37,8 @@ jobs:
       - run: dart run tool/check_core.dart
       - run: flutter test
       - run: flutter analyze
-      - run: flutter test --dart-define=SB_LANGUAGE=it test/italian_test.dart
-      - run: flutter build apk --debug --dart-define=SB_LANGUAGE=it --dart-define=SB_DEMO=false
+      - run: flutter test --dart-define=SB_LANGUAGE=it --dart-define=SB_MATTEO=true test/italian_test.dart test/edition_test.dart
+      - run: flutter build apk --debug --dart-define=SB_LANGUAGE=it --dart-define=SB_MATTEO=true
       - uses: actions/upload-artifact@v4
         with:
           name: sb-control-android-italiano

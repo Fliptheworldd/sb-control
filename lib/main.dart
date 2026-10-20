@@ -10,7 +10,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final controller = AppController();
   await controller.initialize(
-    startDemo: kIsWeb || const bool.fromEnvironment('SB_DEMO'),
+    // Simulation is available only in explicitly built internal web previews.
+    // Installed iOS/Android apps always use the real native BLE transport.
+    startDemo: kIsWeb && const bool.fromEnvironment('SB_DEMO'),
   );
   final care = CareController(
     preferences: LocalPreferences(

@@ -9,7 +9,7 @@
 | App-/Bundle-ID | `de.vachsystems.sbcontrol`, vor Signierung auf eigene registrierte Kennung prüfen |
 | Abhängigkeiten | Direkte Versionen in pubspec.yaml, Auflösung in pubspec.lock |
 
-Kotlin 2.3.0 entspricht dem aufgelösten `shared_preferences_android` 2.4.23. `flutter_reactive_ble` 5.4.2 wurde für Dart 3.9 gewählt. Updates mit erneutem Test- und Lockfile-Review. Hier wurde **kein Android-/iOS-Build abgeschlossen**: Eine vollständige Android-SDK-/JDK- bzw. Xcode-/CocoaPods-Buildumgebung fehlte.
+Kotlin 2.3.0 entspricht dem aufgelösten `shared_preferences_android` 2.4.23. `flutter_reactive_ble` 5.4.2 wurde für Dart 3.9 gewählt. Updates mit erneutem Test- und Lockfile-Review. Native Builds laufen inzwischen über GitHub Actions: Android auf Ubuntu, iPhone auf macOS. Der lokale Linux-Arbeitsplatz führt Flutter-Tests, Analyse und die kompilierte Web-Vorschau aus.
 
 ## Entwicklung
 
@@ -30,8 +30,10 @@ Bluetooth wird erst bei Scan/Connect angefordert. Android ≥31 nutzt Scan/Conne
 ## Android
 
 ```sh
-flutter build apk --debug
+flutter build apk --debug --dart-define=SB_LANGUAGE=it --dart-define=SB_MATTEO=true
 ```
+
+Die Freundesausgabe ist italienisch. `SB_MATTEO=true` ergänzt nur unter Android die persönliche Zeile. Ohne diese Defines ist die App deutsch. Die native App kann durch `SB_DEMO` nicht in Simulation geschaltet werden.
 
 Für Release eigenen Keystore verwalten und `android/key.properties.example` lokal nach `android/key.properties` kopieren. Echte Werte eintragen, Schlüssel/Kennwörter nie committen. `storeFile` ist relativ zu `android/app/` oder ein absoluter Pfad.
 
@@ -58,31 +60,15 @@ Kompilierbarkeit garantiert keine Store-Zulassung. Die [Apple App Review Guideli
 
 ## GitHub
 
-Quellen, Tests, pubspec.lock, Gradle-Wrapper, .gitignore und zwei Workflows liegen vor:
+Repository: https://github.com/Fliptheworldd/sb-control
+Aktuelle Erweiterung: PR #2, `feature/design-italiano` auf `feature/cleaning-care`.
 
-- `verify.yml`: Formatierung, Kernprüfungen, Analyse, Flutter-Tests und Web-Releasebuild bei Push/PR; Webbuild als Actions-Artefakt.
-- `mobile-builds.yml`: manuell startbare Android-Debug-APK und iOS-Simulator-Builds. Vorbereitet, hier nicht auf GitHub ausgeführt. Keine Veröffentlichung oder Signing-Secrets.
+- `verify.yml`: Format, Kernprüfungen, Analyse, Flutter-Tests und interne deutsche Web-Vorschau.
+- `mobile-builds.yml`: Android-APK bei relevanten Pull Requests; zusätzlich italienische Tests mit Matteo-Flag. Simulator-Build nur beim passenden manuellen Aufruf.
+- `ios-device.yml`: deutsche unsignierte IPA für echte iPhones auf macOS. Kein italienisches Sprach- oder Matteo-Flag.
 
-Das Projekt wurde nicht zu GitHub übertragen. Nach Anlegen des gewünschten Repositories:
-
-```sh
-git init -b main
-git add .
-git commit -m "Implement SB CONTROL native Flutter app"
-git remote add origin YOUR_GITHUB_REMOTE
-git push -u origin main
-```
-
-`preview/web/` ist im ZIP enthalten, bleibt aber aus Git ausgeschlossen; CI baut es neu. Caches, lokale SDK-Pfade, Pods und Schlüssel bleiben ausgeschlossen. Der Rechteinhaber legt die Projektlizenz fest (siehe NOTICE.md).
-
-## Browserprüfung
-
-Nach Webbuild, mit Node.js und Playwright als reine Entwicklungswerkzeuge:
-
-```sh
-npm install --no-save playwright
-npx playwright install chromium
-node tool/web_smoke.cjs
-```
-
-`SB_CHROME` setzt einen bereits installierten Chromium-/Headless-Shell-Pfad, `SB_WEB_DIR` ein alternatives Buildverzeichnis. Der Test startet und beendet seinen lokalen Server selbst.
+APK und IPA liegen nach erfolgreichen Jobs als Actions-Artefakte vor, jeweils
+14 Tage aufbewahrt. Kein Store-Upload und keine Apple-/Release-Schlüssel im Repo.
+Die Android-APK ist debug-signiert; für dauerhafte Update-Kompatibilität später
+einen eigenen stabilen Schlüssel verwenden. Die IPA wird anschließend lokal mit
+Sideloadly signiert und installiert; Anleitung unter `IPHONE_WINDOWS.md`.

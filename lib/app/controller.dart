@@ -45,6 +45,9 @@ class AppController extends ChangeNotifier {
   int _pollCount = 0;
   int? _operationGeneration;
 
+  /// Changes on every disconnect, including reconnects to the same device.
+  int get connectionRevision => _queue.generation;
+
   Future<T> _serialized<T>(Future<T> Function() action) => _queue.run(() async {
     _operationGeneration = _queue.generation;
     try {
@@ -598,6 +601,52 @@ class AppController extends ChangeNotifier {
     },
     confirmed: () => data[superboost ? 'superboost' : 'boost'] == value,
   );
+
+  /// Saves one explicit user draft using the existing verified offset commands.
+  /// Both values are validated before the first write. This is not an atomic
+  /// firmware transaction: partial failure must never produce a success message.
+  Future<bool> saveBoostSettings({required int boost, int? superboost}) async {
+    final token = _queue.generation;
+    var acknowledged = false;
+    if (superboost != null && !enabled('superboost')) {
+      error = L.s028;
+      notifyListeners();
+      return false;
+    }
+    await _control(
+      'boost',
+      () async {
+        within(boost, 1, 99);
+        if (superboost != null) within(superboost, 1, 99);
+        if (model.isCrafty && (data['target'] as num? ?? 210) + boost > 210) {
+          throw RangeError(L.s034);
+        }
+        if (data['boost'] != boost) {
+          if (model.isQvap) {
+            await _exchange(QvapCodec.boost(boost));
+          } else {
+            await _write(AttributeCodec.boost(model, boost));
+          }
+        }
+        if (superboost != null && data['superboost'] != superboost) {
+          _checkSession();
+          if (!supports('superboost')) throw StateError(L.s029);
+          await _exchange(QvapCodec.boost(superboost, superboost: true));
+        }
+      },
+      confirmed: () {
+        acknowledged =
+            data['boost'] == boost &&
+            (superboost == null || data['superboost'] == superboost);
+        return acknowledged;
+      },
+    );
+    return acknowledged &&
+        connected &&
+        _queue.isCurrent(token) &&
+        error.isEmpty;
+  }
+
   Future<void> setBrightness(int value) => _control(
     'brightness',
     () => model.isQvap

@@ -17,6 +17,13 @@ const panel = Color(0xFF1B1E23);
 const muted = Color(0xFFA7ABB3);
 const canvas = Color(0xFF101216);
 
+// Explicit friend build; even an Italian iPhone build can never show this.
+bool get isMatteoEdition =>
+    !kIsWeb &&
+    defaultTargetPlatform == TargetPlatform.android &&
+    L.italian &&
+    const bool.fromEnvironment('SB_MATTEO');
+
 class SbControlApp extends StatelessWidget {
   const SbControlApp({super.key, required this.controller, this.care});
   final AppController controller;
@@ -229,14 +236,26 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       return screen([
         title(L.s059, L.s060, L.s061),
         block([
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.asset(
-              'assets/art/icon.webp',
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.contain,
-              excludeFromSemantics: true,
+          SizedBox(
+            height: 150,
+            child: Row(
+              children: [
+                for (final model in [
+                  DeviceModel.venty,
+                  DeviceModel.veazy,
+                  DeviceModel.craftyPlus,
+                  DeviceModel.volcanoHybrid,
+                ])
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: SizedBox(
+                        height: 150,
+                        child: DevicePhoto(model: model, compact: true),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
           const SizedBox(height: 26),
@@ -253,14 +272,6 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
               onPressed: c.connecting ? null : () => setState(() => tab = 1),
               icon: const Icon(Icons.add, color: canvas),
               label: const Text(L.s064),
-            ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              onPressed: c.connecting ? null : () => c.setDemo(true),
-              child: const Text(L.s065),
             ),
           ),
         ]),
@@ -318,108 +329,84 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                     ? "Temperatura impostata ${c.temperature(target)} ${c.unit}"
                     : "Zieltemperatur ${c.temperature(target)} ${c.unit}"),
                 child: SizedBox(
-                  height: 245,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Positioned(
-                        right: -12,
-                        top: 0,
-                        bottom: 0,
-                        width: 190,
-                        child: ExcludeSemantics(
-                          child: ShaderMask(
-                            blendMode: BlendMode.dstIn,
-                            shaderCallback: (rect) => const RadialGradient(
-                              colors: [
-                                Colors.white,
-                                Colors.white,
-                                Colors.transparent,
-                              ],
-                              stops: [0, .6, 1],
-                              radius: .85,
-                            ).createShader(rect),
-                            child: Image.asset(
-                              'assets/art/${c.model == DeviceModel.unknown
-                                  ? 'icon'
-                                  : c.model.isCrafty
-                                  ? 'crafty'
-                                  : c.model.name}.webp',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              panel,
-                              Color(0xE61B1E23),
-                              Color(0x001B1E23),
-                            ],
-                            stops: [0, .35, .85],
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              L.s351,
-                              style: TextStyle(
-                                color: muted,
-                                fontSize: 10,
-                                letterSpacing: 1.4,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: c.temperature(target),
-                                    style: const TextStyle(
-                                      fontSize: 70,
-                                      height: 1,
-                                      letterSpacing: -4,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: c.unit,
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      color: orange,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 18),
-                            SizedBox(
-                              width: 150,
-                              child: Text(
-                                heating
-                                    ? ready
-                                          ? L.s074
-                                          : L.s075
-                                    : L.s076,
-                                style: const TextStyle(
+                  height: 230,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                L.s351,
+                                style: TextStyle(
                                   color: muted,
-                                  fontSize: 12,
-                                  height: 1.4,
+                                  fontSize: 10,
+                                  letterSpacing: 1.4,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 14),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: c.temperature(target),
+                                        style: const TextStyle(
+                                          fontSize: 64,
+                                          height: 1,
+                                          letterSpacing: -4,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: c.unit,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          color: orange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 18),
+                              SizedBox(
+                                width: 150,
+                                child: Text(
+                                  heating
+                                      ? ready
+                                            ? L.s074
+                                            : L.s075
+                                      : L.s076,
+                                  style: const TextStyle(
+                                    color: muted,
+                                    fontSize: 12,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 14),
+                        Expanded(
+                          flex: 2,
+                          child: SizedBox(
+                            height: c.model == DeviceModel.volcanoHybrid
+                                ? 128
+                                : 210,
+                            child: DevicePhoto(model: c.model),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -446,40 +433,6 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                   ),
                 ],
               ),
-              if (c.model != DeviceModel.volcanoHybrid) ...[
-                SettingSlider(
-                  label: L.s320,
-                  value: (c.data['boost'] as num?)?.toDouble(),
-                  min: 1,
-                  max: c.model.isCrafty
-                      ? math
-                            .max(
-                              1,
-                              math.min(
-                                99,
-                                210 - (c.data['target'] as num? ?? 180),
-                              ),
-                            )
-                            .toDouble()
-                      : 99,
-                  suffix: '°C',
-                  enabled:
-                      c.enabled('boost') &&
-                      (!c.model.isCrafty ||
-                          (c.data['target'] as num? ?? 210) < 210),
-                  onCommit: (v) => c.setBoost(v),
-                ),
-                if (c.model.isQvap)
-                  SettingSlider(
-                    label: L.s341,
-                    value: (c.data['superboost'] as num?)?.toDouble(),
-                    min: 1,
-                    max: 99,
-                    suffix: '°C',
-                    enabled: c.enabled('superboost'),
-                    onCommit: (v) => c.setBoost(v, superboost: true),
-                  ),
-              ],
               const SizedBox(height: 14),
               SizedBox(
                 width: double.infinity,
@@ -503,7 +456,16 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                   label: Text(heating ? L.s079 : L.s315),
                 ),
               ),
-              if (c.model != DeviceModel.volcanoHybrid) note(L.s111),
+              if (c.model.hasBattery) ...[
+                const Divider(height: 36),
+                BoostSettings(
+                  key: ValueKey(
+                    'boost-${c.active?.id}-${c.connectionRevision}',
+                  ),
+                  controller: c,
+                ),
+                note(L.s111),
+              ],
               if (c.model == DeviceModel.volcanoHybrid) ...[
                 const SizedBox(height: 10),
                 SizedBox(
@@ -599,6 +561,16 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     if (result != null) await c.rename(d.id, result);
   }
 
+  Future<void> _connectAndOpen(
+    String id,
+    Future<void> Function() connect,
+  ) async {
+    if (!c.connected || c.active?.id != id) await connect();
+    if (mounted && c.connected && !c.connecting && c.active?.id == id) {
+      setState(() => tab = 0);
+    }
+  }
+
   Widget devices() => screen([
     title(L.s089, L.s090, c.demo ? L.s091 : L.s092),
     FilledButton.icon(
@@ -637,14 +609,23 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           padding: const EdgeInsets.only(bottom: 10),
           child: Card(
             child: ListTile(
+              key: ValueKey('saved-${d.id}'),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 18,
                 vertical: 10,
               ),
-              leading: const Icon(Icons.devices, color: orange),
+              leading: SizedBox(
+                width: 46,
+                height: 58,
+                child: DevicePhoto(model: d.model, compact: true),
+              ),
               title: Text(d.displayName),
-              subtitle: Text(c.active?.id == d.id ? L.s347 : L.s096),
-              onTap: c.connecting || c.busy ? null : () => c.reconnect(d),
+              subtitle: Text(
+                c.connected && c.active?.id == d.id ? L.s347 : L.s096,
+              ),
+              onTap: c.connecting || c.busy
+                  ? null
+                  : () => _connectAndOpen(d.id, () => c.reconnect(d)),
               trailing: PopupMenuButton<String>(
                 tooltip: L.s097,
                 onSelected: (v) {
@@ -681,15 +662,18 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
         padding: const EdgeInsets.only(bottom: 10),
         child: Card(
           child: ListTile(
+            key: ValueKey('found-${d.id}'),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 18,
               vertical: 12,
             ),
-            leading: Icon(
-              m == DeviceModel.volcanoHybrid
-                  ? Icons.device_thermostat
-                  : Icons.bluetooth,
-              color: orange,
+            leading: SizedBox(
+              width: 46,
+              height: 58,
+              child: DevicePhoto(
+                model: d.id == 'demo-craftyPlus' ? DeviceModel.craftyPlus : m,
+                compact: true,
+              ),
             ),
             title: Text(
               label,
@@ -708,10 +692,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             ),
             onTap: c.connecting || c.busy
                 ? null
-                : () async {
-                    await c.connect(d);
-                    if (mounted && c.connected) setState(() => tab = 0);
-                  },
+                : () => _connectAndOpen(d.id, () => c.connect(d)),
           ),
         ),
       );
@@ -798,14 +779,6 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       ),
       const SizedBox(height: 8),
       const Text(L.s108, style: TextStyle(color: muted, fontSize: 12)),
-      const Divider(),
-      option(
-        L.s322,
-        kIsWeb ? L.s109 : L.s110,
-        c.demo,
-        !kIsWeb && !c.busy && !c.connecting,
-        c.setDemo,
-      ),
     ]),
     const SizedBox(height: 18),
     CareNotificationSettings(controller: care, onOpen: () => _selectTab(2)),
@@ -1061,6 +1034,25 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             ],
           ),
         ),
+        bottom: isMatteoEdition
+            ? const PreferredSize(
+                preferredSize: Size.fromHeight(28),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(18, 0, 18, 10),
+                    child: Text(
+                      'Il Vape Club di Matteo',
+                      style: TextStyle(
+                        color: orange,
+                        fontSize: 12,
+                        letterSpacing: .7,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : null,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
@@ -1141,6 +1133,67 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
   );
 }
 
+/// Unmodified manufacturer photos, framed from their original source pixels.
+/// Only blank margins are excluded from the presentation; no generated device.
+class DevicePhoto extends StatelessWidget {
+  const DevicePhoto({super.key, required this.model, this.compact = false});
+  final DeviceModel model;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    if (model == DeviceModel.unknown) {
+      return const Icon(Icons.bluetooth, color: orange, size: 32);
+    }
+    final sourceSize = model == DeviceModel.crafty
+        ? const Size(79, 108)
+        : const Size(700, 700);
+    final bounds = switch (model) {
+      DeviceModel.venty => const Rect.fromLTWH(240, 96, 214, 604),
+      DeviceModel.veazy => const Rect.fromLTWH(276, 214, 150, 472),
+      DeviceModel.craftyPlus => const Rect.fromLTWH(230, 270, 245, 430),
+      DeviceModel.crafty => const Rect.fromLTWH(0, 0, 79, 108),
+      DeviceModel.volcanoHybrid => const Rect.fromLTWH(3, 55, 693, 645),
+      _ => const Rect.fromLTWH(0, 0, 700, 700),
+    };
+    return ExcludeSemantics(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(compact ? 12 : 26),
+        child: ColoredBox(
+          color: Colors.white,
+          child: Padding(
+            padding: EdgeInsets.all(compact ? 5 : 12),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: SizedBox(
+                width: bounds.width,
+                height: bounds.height,
+                child: ClipRect(
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: -bounds.left,
+                        top: -bounds.top,
+                        width: sourceSize.width,
+                        height: sourceSize.height,
+                        child: Image.asset(
+                          'assets/devices/${model.name}.jpg',
+                          fit: BoxFit.fill,
+                          filterQuality: FilterQuality.medium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _StatusPill extends StatelessWidget {
   const _StatusPill({required this.label, required this.active});
   final String label;
@@ -1201,6 +1254,146 @@ class DialPainter extends CustomPainter {
       progress != oldDelegate.progress;
 }
 
+class BoostSettings extends StatefulWidget {
+  const BoostSettings({super.key, required this.controller});
+  final AppController controller;
+  @override
+  State<BoostSettings> createState() => _BoostSettingsState();
+}
+
+class _BoostSettingsState extends State<BoostSettings> {
+  int? boostDraft, superDraft, confirmedBoost, confirmedSuper;
+  bool saving = false;
+
+  Future<void> save(int boost, int? superboost) async {
+    setState(() => saving = true);
+    final confirmed = await widget.controller.saveBoostSettings(
+      boost: boost,
+      superboost: superboost,
+    );
+    if (!mounted) return;
+    setState(() {
+      saving = false;
+      if (confirmed) {
+        boostDraft = null;
+        superDraft = null;
+        confirmedBoost = boost;
+        confirmedSuper = superboost;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = widget.controller;
+    final boost = boostDraft ?? (c.data['boost'] as num?)?.round();
+    final superboost = superDraft ?? (c.data['superboost'] as num?)?.round();
+    final maxBoost = c.model.isCrafty
+        ? math
+              .max(1, math.min(99, 210 - (c.data['target'] as num? ?? 210)))
+              .toDouble()
+        : 99.0;
+    final dirty =
+        (boostDraft != null && boostDraft != c.data['boost']) ||
+        (superDraft != null && superDraft != c.data['superboost']);
+    final valid =
+        boost != null &&
+        boost <= maxBoost &&
+        (!c.model.isCrafty || (c.data['target'] as num? ?? 210) < 210);
+    final confirmed =
+        !dirty &&
+        confirmedBoost != null &&
+        confirmedBoost == c.data['boost'] &&
+        (!c.model.isQvap || confirmedSuper == c.data['superboost']);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          L.boostProfile,
+          style: TextStyle(
+            color: muted,
+            fontSize: 10,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        SettingSlider(
+          label: L.s320,
+          showSteps: true,
+          prefix: '+',
+          value: boost?.toDouble(),
+          min: 1,
+          max: maxBoost,
+          suffix: '°C',
+          enabled:
+              c.enabled('boost') &&
+              !saving &&
+              (!c.model.isCrafty || (c.data['target'] as num? ?? 210) < 210),
+          onCommit: (v) => setState(() {
+            boostDraft = v;
+            confirmedBoost = null;
+          }),
+        ),
+        if (c.model.isQvap)
+          SettingSlider(
+            label: L.s341,
+            showSteps: true,
+            prefix: '+',
+            value: superboost?.toDouble(),
+            min: 1,
+            max: 99,
+            suffix: '°C',
+            enabled: c.enabled('superboost') && !saving,
+            onCommit: (v) => setState(() {
+              superDraft = v;
+              confirmedBoost = null;
+            }),
+          ),
+        const SizedBox(height: 6),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            key: const ValueKey('save-boost'),
+            onPressed:
+                dirty &&
+                    valid &&
+                    !saving &&
+                    c.enabled('boost') &&
+                    (!c.model.isQvap ||
+                        (superboost != null && c.enabled('superboost')))
+                ? () => save(boost, c.model.isQvap ? superboost : null)
+                : null,
+            icon: saving
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Icon(
+                    confirmed
+                        ? Icons.check_circle_outline
+                        : Icons.save_outlined,
+                  ),
+            label: Text(saving ? L.boostSaving : L.boostSave),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Semantics(
+          liveRegion: true,
+          child: Text(
+            dirty
+                ? (!valid ? L.boostInvalid : L.boostPending)
+                : confirmed
+                ? L.boostSaved
+                : L.boostLoaded,
+            style: TextStyle(color: dirty ? orange : muted, fontSize: 12),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class SettingSlider extends StatefulWidget {
   const SettingSlider({
     super.key,
@@ -1211,8 +1404,11 @@ class SettingSlider extends StatefulWidget {
     required this.suffix,
     required this.enabled,
     required this.onCommit,
+    this.showSteps = false,
+    this.prefix = '',
   });
-  final String label, suffix;
+  final String label, suffix, prefix;
+  final bool showSteps;
   final double? value;
   final double min, max;
   final bool enabled;
@@ -1245,24 +1441,47 @@ class _SettingSliderState extends State<SettingSlider> {
               Text(
                 widget.value == null
                     ? '—'
-                    : '${current.round()} ${widget.suffix}',
+                    : '${widget.prefix}${current.round()} ${widget.suffix}',
                 style: const TextStyle(color: orange, fontSize: 14),
               ),
             ],
           ),
-          Slider(
-            value: current,
-            min: widget.min,
-            max: max,
-            divisions: (max - widget.min).round(),
-            semanticFormatterCallback: (v) => '${v.round()} ${widget.suffix}',
-            onChanged: active ? (v) => setState(() => draft = v) : null,
-            onChangeEnd: active
-                ? (v) {
-                    setState(() => draft = null);
-                    widget.onCommit(v.round());
-                  }
-                : null,
+          Row(
+            children: [
+              if (widget.showSteps)
+                IconButton(
+                  tooltip: '${widget.label} −1 ${widget.suffix}',
+                  onPressed: active && current > widget.min
+                      ? () => widget.onCommit(current.round() - 1)
+                      : null,
+                  icon: const Icon(Icons.remove, size: 18),
+                ),
+              Expanded(
+                child: Slider(
+                  value: current,
+                  min: widget.min,
+                  max: max,
+                  divisions: (max - widget.min).round(),
+                  semanticFormatterCallback: (v) =>
+                      '${v.round()} ${widget.suffix}',
+                  onChanged: active ? (v) => setState(() => draft = v) : null,
+                  onChangeEnd: active
+                      ? (v) {
+                          setState(() => draft = null);
+                          widget.onCommit(v.round());
+                        }
+                      : null,
+                ),
+              ),
+              if (widget.showSteps)
+                IconButton(
+                  tooltip: '${widget.label} +1 ${widget.suffix}',
+                  onPressed: active && current < widget.max
+                      ? () => widget.onCommit(current.round() + 1)
+                      : null,
+                  icon: const Icon(Icons.add, size: 18),
+                ),
+            ],
           ),
         ],
       ),
