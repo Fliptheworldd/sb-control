@@ -1,5 +1,12 @@
 name: Mobile development builds
 on:
+  pull_request:
+    paths:
+      - 'lib/**'
+      - 'android/**'
+      - 'assets/**'
+      - 'pubspec.*'
+      - '.github/workflows/mobile-builds.yml'
   workflow_dispatch:
     inputs:
       platform:
@@ -12,7 +19,7 @@ permissions:
   contents: read
 jobs:
   android:
-    if: inputs.platform == 'both' || inputs.platform == 'android'
+    if: github.event_name == 'pull_request' || inputs.platform == 'both' || inputs.platform == 'android'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

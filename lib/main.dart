@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'app/controller.dart';
 import 'ui/app.dart';
+import 'app/preferences.dart';
+import 'care/controller.dart';
+import 'care/reminders.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,5 +12,12 @@ Future<void> main() async {
   await controller.initialize(
     startDemo: kIsWeb || const bool.fromEnvironment('SB_DEMO'),
   );
-  runApp(SbControlApp(controller: controller));
+  final care = CareController(
+    preferences: LocalPreferences(
+      key: kIsWeb ? 'sb-control.care.demo.v1' : 'sb-control.care.v1',
+    ),
+    reminders: NativeCareReminders(),
+  );
+  await care.initialize();
+  runApp(SbControlApp(controller: controller, care: care));
 }

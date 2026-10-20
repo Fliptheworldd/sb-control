@@ -7,10 +7,12 @@ abstract interface class Preferences {
 }
 
 class LocalPreferences implements Preferences {
+  LocalPreferences({this.key = 'sb-control.v3'});
+  final String key;
   @override
   Future<Map<String, dynamic>> load() async {
     final p = await SharedPreferences.getInstance();
-    final value = p.getString('sb-control.v3');
+    final value = p.getString(key);
     if (value == null) return {};
     try {
       return Map<String, dynamic>.from(jsonDecode(value) as Map);
@@ -22,7 +24,9 @@ class LocalPreferences implements Preferences {
   @override
   Future<void> save(Map<String, dynamic> value) async {
     final p = await SharedPreferences.getInstance();
-    await p.setString('sb-control.v3', jsonEncode(value));
+    if (!await p.setString(key, jsonEncode(value))) {
+      throw StateError('Einstellungen konnten nicht gespeichert werden.');
+    }
   }
 }
 

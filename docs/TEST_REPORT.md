@@ -1,4 +1,19 @@
-# Testbericht · SB CONTROL 0.3.2
+# Testbericht · SB CONTROL 0.4.0
+
+Stand 20.10.2026, Flutter 3.35.3 / Dart 3.9.2. Pflegefunktion neu; BLE-Protokolle unverändert.
+
+| Prüfung | Ergebnis |
+|---|---|
+| Kern-/Protokollprüfungen | 56/56 bestanden |
+| Flutter-Tests | 24/24 bestanden (bisherige 10 plus 14 Pflege-Tests) |
+| Statische Analyse | Keine Probleme |
+| Pflege-Widgetlayouts | Alle fünf Modelle 320×740; VENTY zusätzlich 150 % Schrift, Abschluss nur mit Bestätigung |
+| Erinnerungstests | Opt-in, Aus, Persistenz, OS-Rechte, überfälliger Check, Fehler und konkurrierende Änderungen bestanden |
+| Nativer Benachrichtigungsversand | Noch nicht auf physischem iPhone/Android getestet |
+
+Build-/Browserergebnisse für diesen Stand werden nach Abschluss ergänzt. Vorherige Build-Nachweise beziehen sich auf 0.3.2. Der Nutzer berichtete einen erfolgreichen VENTY-Praxistest von 0.3.2; die neue Pflegefunktion ist darin nicht enthalten. [Quellen und Funktionsgrenzen](CLEANING.md) · [Offene Hardwareprüfungen](HARDWARE_TESTS.md).
+
+## Historischer Testbericht · SB CONTROL 0.3.2
 
 Stand 19.10.2026, Flutter 3.35.3 / Dart 3.9.2.
 

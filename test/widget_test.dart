@@ -33,7 +33,13 @@ void main() {
       expect(c.connected, true, reason: c.error);
       await c.setFahrenheit(true);
       await tester.pumpWidget(SbControlApp(controller: c));
-      for (final tab in ['Übersicht', 'Optionen', 'Diagnose', 'Geräte']) {
+      for (final tab in [
+        'Übersicht',
+        'Optionen',
+        'Diagnose',
+        'Geräte',
+        'Pflege',
+      ]) {
         await tester.tap(find.text(tab).last);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull, reason: '${device.name}: $tab');

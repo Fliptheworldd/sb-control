@@ -1,6 +1,17 @@
 # Offene Hardwaretests
 
-**Kein Test wurde an einem physischen Gerät durchgeführt.** Weder Vaporizer noch iPhone/Android-Telefone mit zugänglichem Bluetooth-Adapter standen zur Verfügung. Quellenabgleich und Simulation ersetzen diese Abnahme nicht.
+**Keine dokumentierte vollständige Hardware-Abnahme.** Der Nutzer berichtet, dass 0.3.2 auf seinem iPhone mit VENTY einschließlich Einstellungen funktioniert. Das ist ein hilfreicher Praxistest, aber ohne protokollierte Firmware-/Testmatrix keine Freigabe aller Modelle. Der Entwicklungsumgebung stehen keine physischen Geräte zur Verfügung. Quellenabgleich und Simulation ersetzen die folgende Abnahme nicht.
+
+## Pflege 0.4.0 — noch am Telefon zu prüfen
+
+- Erststart ohne Mitteilungsdialog; Einschalten einer Modellerinnerung fragt einmal nach Berechtigung.
+- „Benachrichtigung testen“ im Vordergrund, Hintergrund und gesperrt: sichtbarer Hinweis, passender Modell-Pflegebereich beim Antippen. Android darf verzögert zustellen.
+- Warmstart und vollständig beendete App durch Antippen einer Mitteilung; keine unerwünschte Geräteverbindung oder Heizaktivierung.
+- Globaler und modellbezogener Aus-Schalter entfernen ausstehende Hinweise; Bestätigung einer Reinigung verlegt den nächsten Check.
+- OS-Berechtigung ablehnen/entziehen/wieder erlauben, Fokusmodus, Android-Energiesparen, Telefonneustart, App-Update sowie Zeitzonen-/Sommerzeitwechsel prüfen.
+- Pflegeplan nach App-Neustart vorhanden, auch ohne Bluetooth/Internet. Nutzer mit zwei Geräten desselben Modells auf gemeinsamen Modellplan hinweisen.
+- Alle Anleitungen am tatsächlich vorhandenen Modell gegen dessen Bauform/Revision abgleichen. Keine reale Demontage oder chemische Reinigung für diese Änderung ausgeführt.
+- VoiceOver/TalkBack und besonders große Schrift; Texte innerhalb einer Karte erreichbar, Weiter/Zurück unabhängig davon bedienbar.
 
 | Gerät | Firmware erfassen | iOS BLE | Android BLE | Steuerung | Einstellungen | Abbruch/Fehler |
 |---|---|---|---|---|---|---|
