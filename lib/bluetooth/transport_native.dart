@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -21,7 +22,7 @@ class NativeTransport implements BleTransport {
 
   Future<void> _prepare() async {
     if (!Platform.isAndroid && !Platform.isIOS) {
-      throw UnsupportedError('iOS oder Android erforderlich');
+      throw UnsupportedError(L.s303);
     }
     if (Platform.isAndroid) {
       final sdk = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
@@ -30,9 +31,7 @@ class NativeTransport implements BleTransport {
           : [Permission.locationWhenInUse];
       final states = await permissions.request();
       if (states.values.any((s) => !s.isGranted)) {
-        throw StateError(
-          'Bluetooth-Zugriff fehlt. Erlaube ihn in den Systemeinstellungen.',
-        );
+        throw StateError(L.s304);
       }
     }
     await _ble.initialize();
@@ -43,12 +42,13 @@ class NativeTransport implements BleTransport {
         : _ble.status;
     if (state != BleStatus.ready) {
       throw StateError(switch (state) {
-        BleStatus.poweredOff => 'Bluetooth ist ausgeschaltet.',
-        BleStatus.unauthorized =>
-          'Bluetooth-Zugriff fehlt. Prüfe die Systemeinstellungen.',
-        BleStatus.locationServicesDisabled =>
-          'Android benötigt aktivierte Standortdienste für den BLE-Scan.',
-        _ => 'Bluetooth ist nicht verfügbar: ${state.name}',
+        BleStatus.poweredOff => L.s305,
+        BleStatus.unauthorized => L.s306,
+        BleStatus.locationServicesDisabled => L.s307,
+        _ =>
+          (L.italian
+              ? "Bluetooth non disponibile: ${state.name}"
+              : "Bluetooth ist nicht verfügbar: ${state.name}"),
       });
     }
   }
@@ -85,7 +85,7 @@ class NativeTransport implements BleTransport {
             } else if (event.connectionState ==
                 DeviceConnectionState.disconnected) {
               if (!ready.isCompleted) {
-                ready.completeError(StateError('Verbindung getrennt'));
+                ready.completeError(StateError(L.s037));
               }
               _connection.add(false);
             }
@@ -121,7 +121,7 @@ class NativeTransport implements BleTransport {
 
   QualifiedCharacteristic _qualified(GattField field) {
     final id = _id;
-    if (id == null) throw StateError('Kein Gerät verbunden');
+    if (id == null) throw StateError(L.s309);
     return QualifiedCharacteristic(
       deviceId: id,
       serviceId: Uuid.parse(field.service),
@@ -146,7 +146,7 @@ class NativeTransport implements BleTransport {
         value: bytes,
       );
     }
-    throw StateError('Merkmal unterstützt keine Schreibzugriffe');
+    throw StateError(L.s310);
   }
 
   @override

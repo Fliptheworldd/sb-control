@@ -1,3 +1,5 @@
+import '../l10n/strings.dart';
+
 enum DeviceModel { venty, veazy, crafty, craftyPlus, volcanoHybrid, unknown }
 
 extension DeviceModelInfo on DeviceModel {
@@ -7,7 +9,7 @@ extension DeviceModelInfo on DeviceModel {
     DeviceModel.crafty => 'CRAFTY',
     DeviceModel.craftyPlus => 'CRAFTY+',
     DeviceModel.volcanoHybrid => 'VOLCANO HYBRID',
-    DeviceModel.unknown => 'Unbekannt',
+    DeviceModel.unknown => L.s344,
   };
   bool get isQvap => this == DeviceModel.venty || this == DeviceModel.veazy;
   bool get isCrafty =>

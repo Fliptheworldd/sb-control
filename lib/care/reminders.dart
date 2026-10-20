@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -109,20 +110,21 @@ class NativeCareReminders implements CareReminders {
     await _plugin.zonedSchedule(
       (test ? 7200 : 7100) + careModels.indexOf(model),
       test
-          ? 'SB CONTROL · Testerinnerung'
-          : '${model.label}: Zeit für den Pflegecheck',
+          ? L.s293
+          : (L.italian
+                ? "${model.label}: controllo di pulizia"
+                : "${model.label}: Zeit für den Pflegecheck"),
       test
-          ? 'So erscheint deine Erinnerung. Tippen öffnet die Pflege.'
+          ? L.s295
           : model == DeviceModel.volcanoHybrid
-          ? 'Prüfe Füllkammer, Siebe und Zubehör. Die Bildanleitung hilft dir bei der Pflege.'
-          : 'Prüfe Kühleinheit und Siebe. Die Bildanleitung hilft dir bei der Reinigung.',
+          ? L.s296
+          : L.s297,
       tz.TZDateTime.from(when.toUtc(), tz.UTC),
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'sb_care_v1',
-          'Reinigung und Pflege',
-          channelDescription:
-              'Lokale Erinnerungen zum Pflegecheck deiner Geräte',
+          L.s298,
+          channelDescription: L.s299,
           importance: Importance.defaultImportance,
           priority: Priority.defaultPriority,
           icon: 'ic_care_notification',

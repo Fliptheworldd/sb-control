@@ -1,10 +1,18 @@
-# SB CONTROL · 0.4.0
+# SB CONTROL · 0.6.0
 
 Native Flutter-App für iOS und Android auf Basis des gelieferten Quellcodes v0.2. Dunkles Design mit Orange, lokale Geräteverwaltung und direkte Bluetooth-LE-Kommunikation ohne Konto oder Backend.
 
 **Automatisiert und in Simulation getestet.** Der Nutzer berichtet einen erfolgreichen VENTY-Test auf seinem iPhone mit 0.3.2; eine dokumentierte Hardware-Abnahme aller Modelle fehlt. Bluetooth-Befehle sind gegen die öffentliche STORZ & BICKEL Web-App v3.4.1 geprüft. Das ist keine Herstellerfreigabe oder Garantie für alle Firmwarestände.
 
-**iPhone-Testbuild 0.4.0 (6) erfolgreich erstellt:** Die unsignierte IPA enthält den neuen Pflegebereich. [Build-Nachweis und Prüfsumme](docs/IOS_BUILD_RESULT.md) · [Testbericht](docs/TEST_REPORT.md) · [Installation über Windows](docs/IPHONE_WINDOWS.md).
+## Neu in 0.6.0
+
+- Originale Herstellerfotos in Steuerung und Geräteliste, mit getrennten Bildern für CRAFTY und CRAFTY+.
+- Boost und Superboost auf der Temperaturseite: Entwürfe in 1-°C-Schritten ändern und ausdrücklich **auf dem Gerät speichern**. Erfolg erst nach bestätigtem Zurücklesen; kein zusätzlicher Aktivierungsbefehl.
+- Neue und gespeicherte Geräte öffnen nach erfolgreicher Verbindung automatisch die Steuerung. Ein bereits verbundenes Gerät öffnet sie ohne erneute Verbindung.
+- Kein Demo-Einstieg und kein Demo-Schalter in installierten Apps; native Builds verwenden immer echtes BLE.
+- Italienische Android-Freundesausgabe mit „Il Vape Club di Matteo“. iPhone bleibt deutsch und ohne Matteo-Zeile.
+
+[Details und Testgrenzen](docs/UX_060.md) · [Builds](docs/BUILD.md) · [Installation über Windows](docs/IPHONE_WINDOWS.md).
 
 ## Neu in 0.4.0
 
@@ -27,7 +35,7 @@ VENTY: Permanent Boost ist auf erkannte 1.xx-Firmware ab 1.08 mit gültiger Eins
 - Dashboard mit Zieltemperatur, Aufheizen, verfügbaren Messwerten, Akku, Abschaltung und Betriebszeit; HYBRID zusätzlich mit Pumpenschalter.
 - Modellabhängige Einstellungen und Diagnose mit Firmware, GATT-Tabelle, Ereignissen und kopierbarem JSON ohne Gerätename, Geräteadresse oder Seriennummer.
 - Illustrierte Pflegeanleitungen, lokale Reinigungshistorie und opt-in App-Erinnerungen.
-- Expliziter Demo-Modus mit fünf simulierten Geräten. Bluetoothfehler wechseln niemals automatisch zur Simulation.
+- Simulation ausschließlich für automatisierte Tests und ausdrücklich gebaute interne Web-Vorschauen. Kein Demo-Modus in Android/iOS.
 - Vollständige iOS-/Android-Hosts, kompilierte Web-Demo, Tests und GitHub-Actions-Workflows.
 
 | Modell | Temperatur | Aufheizen | Zusätzliche Steuerung |
@@ -52,18 +60,14 @@ flutter test
 flutter run
 ```
 
-Die native App startet ohne aktive Verbindung. Im Tab „Geräte“ suchen und verbinden. „Mit Demo-Geräten ausprobieren“ startet die Simulation. Alternativ:
+Die native App startet ohne aktive Verbindung. Im Tab „Geräte“ suchen und verbinden oder ein gespeichertes Gerät antippen. Die App öffnet danach automatisch die Steuerung.
+
+## Interne Bedienvorschau
+
+Die Entwicklungs-Vorschau nutzt denselben Flutter-Controller mit einem Simulator. Alle Werte darin sind simuliert; sie gehört nicht zur installierten Telefon-App.
 
 ```sh
-flutter run --dart-define=SB_DEMO=true
-```
-
-## Bedienbare Vorschau
-
-Das Auslieferungs-ZIP enthält unter `preview/web/` einen kompilierten **Flutter-Web-Releasebuild derselben Oberfläche und desselben Controllers**. Bluetooth ist dort durch den Simulator ersetzt. Alle Werte sind simuliert.
-
-```sh
-python3 -m http.server 8080 --directory preview/web
+python3 -m http.server 8080 --directory build/web
 # http://localhost:8080 im Browser öffnen.
 ```
 

@@ -1,7 +1,9 @@
+import '../l10n/strings.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/services.dart';
 import '../app/controller.dart';
 import '../core/models.dart';
@@ -15,6 +17,13 @@ const panel = Color(0xFF1B1E23);
 const muted = Color(0xFFA7ABB3);
 const canvas = Color(0xFF101216);
 
+// Explicit friend build; even an Italian iPhone build can never show this.
+bool get isMatteoEdition =>
+    !kIsWeb &&
+    defaultTargetPlatform == TargetPlatform.android &&
+    L.italian &&
+    const bool.fromEnvironment('SB_MATTEO');
+
 class SbControlApp extends StatelessWidget {
   const SbControlApp({super.key, required this.controller, this.care});
   final AppController controller;
@@ -23,6 +32,9 @@ class SbControlApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'SB CONTROL',
+    locale: const Locale(L.italian ? 'it' : 'de'),
+    supportedLocales: const [Locale('de'), Locale('it')],
+    localizationsDelegates: GlobalMaterialLocalizations.delegates,
     theme: ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
@@ -44,7 +56,10 @@ class SbControlApp extends StatelessWidget {
         color: panel,
         margin: EdgeInsets.zero,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),
+          side: const BorderSide(color: Color(0xFF30343B)),
+        ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
@@ -129,9 +144,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) unawaited(care.refreshPermission());
     // No background control or silent command replay on resume.
     if (state == AppLifecycleState.paused && !c.demo) {
-      unawaited(
-        c.disconnect(message: 'App pausiert. Bei Bedarf erneut verbinden.'),
-      );
+      unawaited(c.disconnect(message: L.s058));
     }
   }
 
@@ -164,7 +177,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     ),
   );
   Widget screen(List<Widget> children) => ListView(
-    padding: const EdgeInsets.fromLTRB(22, 20, 22, 28),
+    padding: const EdgeInsets.fromLTRB(18, 12, 18, 28),
     children: children,
   );
   Widget block(List<Widget> children) => Card(
@@ -221,50 +234,49 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
   Widget dashboard() {
     if (!c.connected) {
       return screen([
-        title(
-          'Deine Verbindung',
-          'Alles unter Kontrolle.',
-          'Deine Geräte. Direkt über Bluetooth.',
-        ),
+        title(L.s059, L.s060, L.s061),
         block([
-          const Icon(
-            Icons.bluetooth_searching_rounded,
-            color: orange,
-            size: 64,
+          SizedBox(
+            height: 150,
+            child: Row(
+              children: [
+                for (final model in [
+                  DeviceModel.venty,
+                  DeviceModel.veazy,
+                  DeviceModel.craftyPlus,
+                  DeviceModel.volcanoHybrid,
+                ])
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: SizedBox(
+                        height: 150,
+                        child: DevicePhoto(model: model, compact: true),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: 26),
           const Text(
-            'Bereit, wenn du es bist.',
+            L.s062,
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 12),
-          const Text(
-            'Verbinde deinen Vaporizer und passe Temperatur und Einstellungen an.',
-            style: TextStyle(color: muted, height: 1.5),
-          ),
+          const Text(L.s063, style: TextStyle(color: muted, height: 1.5)),
           const SizedBox(height: 28),
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
               onPressed: c.connecting ? null : () => setState(() => tab = 1),
-              icon: const Icon(Icons.add),
-              label: const Text('Gerät verbinden'),
-            ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              onPressed: c.connecting ? null : () => c.setDemo(true),
-              child: const Text('Mit Demo-Geräten ausprobieren'),
+              icon: const Icon(Icons.add, color: canvas),
+              label: const Text(L.s064),
             ),
           ),
         ]),
         const SizedBox(height: 18),
-        note(
-          'Ohne Konto. Ohne Cloud. Die native App arbeitet auch ohne Internet.',
-          icon: Icons.wifi_off,
-        ),
+        note(L.s066, icon: Icons.wifi_off),
         const Wrap(
           spacing: 8,
           runSpacing: 6,
@@ -287,11 +299,9 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             (c.data['runtimeRemainder'] as int? ?? 0));
     return screen([
       title(
-        c.demo ? 'Demo · ${c.model.label}' : 'Dein Gerät',
+        c.demo ? 'Demo · ${c.model.label}' : L.s067,
         c.displayName,
-        c.demo
-            ? 'Erkunde die App mit simulierten Werten.'
-            : 'Direkt verbunden. Lokal gesteuert.',
+        c.demo ? L.s068 : L.s069,
       ),
       Card(
         child: Padding(
@@ -303,93 +313,100 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                 children: [
                   Flexible(
                     child: _StatusPill(
-                      label: c.demo ? 'DEMO VERBUNDEN' : 'BLUETOOTH VERBUNDEN',
+                      label: c.demo ? L.s070 : L.s071,
                       active: true,
                     ),
                   ),
                   IconButton(
                     onPressed: c.busy ? null : c.disconnect,
-                    tooltip: 'Verbindung trennen',
+                    tooltip: L.s072,
                     icon: const Icon(Icons.link_off, size: 20),
                   ),
                 ],
               ),
               Semantics(
-                label: 'Zieltemperatur ${c.temperature(target)} ${c.unit}',
+                label: (L.italian
+                    ? "Temperatura impostata ${c.temperature(target)} ${c.unit}"
+                    : "Zieltemperatur ${c.temperature(target)} ${c.unit}"),
                 child: SizedBox(
-                  height: 260,
-                  child: LayoutBuilder(
-                    builder: (context, box) {
-                      return CustomPaint(
-                        painter: DialPainter(
-                          progress: target == null
-                              ? 0
-                              : ((target - 40) / (c.model.maxTemperature - 40))
-                                    .clamp(0, 1)
-                                    .toDouble(),
-                        ),
-                        child: Center(
+                  height: 230,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'ZIELTEMPERATUR',
+                                L.s351,
                                 style: TextStyle(
-                                  letterSpacing: 2,
                                   color: muted,
                                   fontSize: 10,
+                                  letterSpacing: 1.4,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
+                              const SizedBox(height: 14),
                               FittedBox(
                                 fit: BoxFit.scaleDown,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      c.temperature(target),
-                                      style: const TextStyle(
-                                        fontSize: 74,
-                                        letterSpacing: -4,
-                                        fontWeight: FontWeight.w300,
-                                        height: 1.2,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 14,
-                                        left: 6,
-                                      ),
-                                      child: Text(
-                                        c.unit,
+                                alignment: Alignment.centerLeft,
+                                child: Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: c.temperature(target),
                                         style: const TextStyle(
-                                          color: orange,
-                                          fontSize: 22,
+                                          fontSize: 64,
+                                          height: 1,
+                                          letterSpacing: -4,
+                                          fontWeight: FontWeight.w300,
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      TextSpan(
+                                        text: c.unit,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          color: orange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                heating
-                                    ? ready
-                                          ? 'Temperatur erreicht'
-                                          : 'Wird aufgeheizt'
-                                    : 'Bereit zum Aufheizen',
-                                style: const TextStyle(
-                                  color: muted,
-                                  fontSize: 13,
+                              const SizedBox(height: 18),
+                              SizedBox(
+                                width: 150,
+                                child: Text(
+                                  heating
+                                      ? ready
+                                            ? L.s074
+                                            : L.s075
+                                      : L.s076,
+                                  style: const TextStyle(
+                                    color: muted,
+                                    fontSize: 12,
+                                    height: 1.4,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      );
-                    },
+                        const SizedBox(width: 14),
+                        Expanded(
+                          flex: 2,
+                          child: SizedBox(
+                            height: c.model == DeviceModel.volcanoHybrid
+                                ? 128
+                                : 210,
+                            child: DevicePhoto(model: c.model),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -400,8 +417,8 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                         c.enabled('target') && target != null && target > 40
                         ? () => c.setTarget(target.round() - 1)
                         : null,
-                    tooltip: 'Temperatur um 1 °C senken',
-                    icon: const Icon(Icons.remove),
+                    tooltip: L.s077,
+                    icon: const Icon(Icons.remove, color: canvas),
                   ),
                   Expanded(child: TargetSlider(controller: c)),
                   IconButton.filledTonal(
@@ -411,8 +428,8 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                             target < c.model.maxTemperature
                         ? () => c.setTarget(target.round() + 1)
                         : null,
-                    tooltip: 'Temperatur um 1 °C erhöhen',
-                    icon: const Icon(Icons.add),
+                    tooltip: L.s078,
+                    icon: const Icon(Icons.add, color: canvas),
                   ),
                 ],
               ),
@@ -436,9 +453,19 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.power_settings_new),
-                  label: Text(heating ? 'Aufheizen stoppen' : 'Aufheizen'),
+                  label: Text(heating ? L.s079 : L.s315),
                 ),
               ),
+              if (c.model.hasBattery) ...[
+                const Divider(height: 36),
+                BoostSettings(
+                  key: ValueKey(
+                    'boost-${c.active?.id}-${c.connectionRevision}',
+                  ),
+                  controller: c,
+                ),
+                note(L.s111),
+              ],
               if (c.model == DeviceModel.volcanoHybrid) ...[
                 const SizedBox(height: 10),
                 SizedBox(
@@ -448,11 +475,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                         ? () => c.setPump(c.data['pump'] != true)
                         : null,
                     icon: const Icon(Icons.air),
-                    label: Text(
-                      c.data['pump'] == true
-                          ? 'Pumpe ausschalten'
-                          : 'Pumpe einschalten',
-                    ),
+                    label: Text(c.data['pump'] == true ? L.s080 : L.s081),
                   ),
                 ),
               ],
@@ -464,20 +487,18 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       Row(
         children: [
           metric(
-            c.model.hasBattery ? 'Akku' : 'Versorgung',
-            c.model.hasBattery
-                ? '${c.data['battery'] ?? '—'} %'
-                : 'Netzbetrieb',
+            c.model.hasBattery ? L.s313 : L.s348,
+            c.model.hasBattery ? '${c.data['battery'] ?? '—'} %' : L.s333,
             c.model.hasBattery ? Icons.battery_5_bar : Icons.power,
           ),
           const SizedBox(width: 10),
           metric(
-            'Abschaltung',
+            L.s312,
             '${c.data['remaining'] ?? '—'} s',
             Icons.timer_outlined,
           ),
           const SizedBox(width: 10),
-          metric('Betriebszeit', '${runtime ~/ 60} h', Icons.history),
+          metric(L.s318, '${runtime ~/ 60} h', Icons.history),
         ],
       ),
       const SizedBox(height: 18),
@@ -486,13 +507,13 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Expanded(
-              child: Text('Isttemperatur', style: TextStyle(color: muted)),
+              child: Text(L.s330, style: TextStyle(color: muted)),
             ),
             const SizedBox(width: 12),
             Flexible(
               child: Text(
                 current == null
-                    ? 'Nicht übertragen'
+                    ? L.s082
                     : '${c.temperature(current)} ${c.unit}',
                 textAlign: TextAlign.end,
                 style: const TextStyle(fontWeight: FontWeight.w600),
@@ -500,23 +521,13 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             ),
           ],
         ),
-        if (c.model.isQvap)
-          note(
-            'Manche Firmwarestände liefern keinen Messwert. SB CONTROL zeigt dann keine geschätzte Temperatur.',
-          ),
+        if (c.model.isQvap) note(L.s083),
         if (c.model.isCrafty && !craftyModern(c.data['firmware'] as String?))
-          note(
-            'Ältere oder unbekannte Firmware: Heizschalter und erweiterte Einstellungen sind gesperrt.',
-          ),
-        if (c.data['craftyFahrenheit'] == true)
-          note(
-            'CRAFTY meldet Fahrenheit. Temperatur-Schreibzugriffe bleiben bis zum Hardwareabgleich gesperrt.',
-          ),
+          note(L.s084),
+        if (c.data['craftyFahrenheit'] == true) note(L.s085),
       ]),
       note(
-        c.demo
-            ? 'Alle Geräte und Werte in diesem Modus sind simuliert.'
-            : 'Quellengeprüfte Protokolle. Tests mit echter Hardware stehen noch aus.',
+        c.demo ? L.s086 : L.s087,
         icon: c.demo ? Icons.science_outlined : Icons.verified_outlined,
       ),
     ]);
@@ -527,7 +538,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     final result = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Gerätename'),
+        title: const Text(L.s088),
         content: TextField(
           controller: input,
           maxLength: 30,
@@ -537,11 +548,11 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Abbrechen'),
+            child: const Text(L.s311),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, input.text),
-            child: const Text('Speichern'),
+            child: const Text(L.s340),
           ),
         ],
       ),
@@ -550,14 +561,18 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     if (result != null) await c.rename(d.id, result);
   }
 
+  Future<void> _connectAndOpen(
+    String id,
+    Future<void> Function() connect,
+  ) async {
+    if (!c.connected || c.active?.id != id) await connect();
+    if (mounted && c.connected && !c.connecting && c.active?.id == id) {
+      setState(() => tab = 0);
+    }
+  }
+
   Widget devices() => screen([
-    title(
-      'Dein Setup',
-      'Geräte',
-      c.demo
-          ? 'Fünf Modelle. Eine gemeinsame Bedienung.'
-          : 'Schalte dein Gerät ein und starte die Suche.',
-    ),
+    title(L.s089, L.s090, c.demo ? L.s091 : L.s092),
     FilledButton.icon(
       onPressed: c.connecting
           ? null
@@ -569,10 +584,10 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       ),
       label: Text(
         c.scanning
-            ? 'Suche stoppen'
+            ? L.s093
             : c.demo
-            ? 'Demo-Geräte suchen'
-            : 'Nach Geräten suchen',
+            ? L.s094
+            : L.s095,
       ),
     ),
     const SizedBox(height: 12),
@@ -585,7 +600,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     if (!c.demo && c.saved.isNotEmpty) ...[
       const SizedBox(height: 24),
       const Text(
-        'GESPEICHERT',
+        L.s326,
         style: TextStyle(color: muted, letterSpacing: 1.6, fontSize: 11),
       ),
       const SizedBox(height: 12),
@@ -594,18 +609,25 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           padding: const EdgeInsets.only(bottom: 10),
           child: Card(
             child: ListTile(
+              key: ValueKey('saved-${d.id}'),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 18,
                 vertical: 10,
               ),
-              leading: const Icon(Icons.devices, color: orange),
+              leading: SizedBox(
+                width: 46,
+                height: 58,
+                child: DevicePhoto(model: d.model, compact: true),
+              ),
               title: Text(d.displayName),
               subtitle: Text(
-                c.active?.id == d.id ? 'Verbunden' : 'Zum Verbinden antippen',
+                c.connected && c.active?.id == d.id ? L.s347 : L.s096,
               ),
-              onTap: c.connecting || c.busy ? null : () => c.reconnect(d),
+              onTap: c.connecting || c.busy
+                  ? null
+                  : () => _connectAndOpen(d.id, () => c.reconnect(d)),
               trailing: PopupMenuButton<String>(
-                tooltip: 'Gerät verwalten',
+                tooltip: L.s097,
                 onSelected: (v) {
                   if (v == 'rename') {
                     rename(d);
@@ -614,14 +636,8 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                   }
                 },
                 itemBuilder: (_) => [
-                  const PopupMenuItem(
-                    value: 'rename',
-                    child: Text('Umbenennen'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'forget',
-                    child: Text('Entfernen'),
-                  ),
+                  const PopupMenuItem(value: 'rename', child: Text(L.s343)),
+                  const PopupMenuItem(value: 'forget', child: Text(L.s325)),
                 ],
               ),
             ),
@@ -631,7 +647,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     ],
     const SizedBox(height: 24),
     Text(
-      c.demo ? 'DEMO-GERÄTE' : 'IN DER NÄHE',
+      c.demo ? L.s098 : L.s099,
       style: const TextStyle(color: muted, letterSpacing: 1.6, fontSize: 11),
     ),
     const SizedBox(height: 12),
@@ -646,15 +662,18 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
         padding: const EdgeInsets.only(bottom: 10),
         child: Card(
           child: ListTile(
+            key: ValueKey('found-${d.id}'),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 18,
               vertical: 12,
             ),
-            leading: Icon(
-              m == DeviceModel.volcanoHybrid
-                  ? Icons.device_thermostat
-                  : Icons.bluetooth,
-              color: orange,
+            leading: SizedBox(
+              width: 46,
+              height: 58,
+              child: DevicePhoto(
+                model: d.id == 'demo-craftyPlus' ? DeviceModel.craftyPlus : m,
+                compact: true,
+              ),
             ),
             title: Text(
               label,
@@ -662,8 +681,8 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             ),
             subtitle: Text(
               c.active?.id == d.id && c.connected
-                  ? 'Verbunden'
-                  : '${d.rssi} dBm · ${c.demo ? 'Simulation' : 'Verfügbar'}',
+                  ? L.s347
+                  : '${d.rssi} dBm · ${c.demo ? L.s339 : (L.italian ? 'Disponibile' : 'Verfügbar')}',
             ),
             trailing: Icon(
               c.active?.id == d.id && c.connected
@@ -673,10 +692,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             ),
             onTap: c.connecting || c.busy
                 ? null
-                : () async {
-                    await c.connect(d);
-                    if (mounted && c.connected) setState(() => tab = 0);
-                  },
+                : () => _connectAndOpen(d.id, () => c.connect(d)),
           ),
         ),
       );
@@ -685,15 +701,11 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       block([
         const Icon(Icons.radar, color: muted, size: 35),
         const SizedBox(height: 14),
-        const Text('Noch kein Gerät gefunden'),
-        note(
-          'Gerät einschalten, Bluetooth aktivieren und andere verbundene Apps schließen. Bei Android bis Version 11 können Standortdienste erforderlich sein.',
-        ),
+        const Text(L.s100),
+        note(L.s101),
       ]),
     const SizedBox(height: 20),
-    note(
-      'Der Gerätename allein reicht nicht: SB CONTROL prüft nach dem Verbinden auch die angebotenen Bluetooth-Dienste.',
-    ),
+    note(L.s102),
   ]);
 
   Widget option(
@@ -714,18 +726,20 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Gerät zurücksetzen?'),
+        title: const Text(L.s103),
         content: Text(
-          'Die individuellen Einstellungen von ${c.model.label} werden auf die Geräte-Standardwerte zurückgesetzt. Die Basis wird auf 180 °C gesetzt.',
+          (L.italian
+              ? "Le impostazioni personalizzate di ${c.model.label} saranno ripristinate ai valori predefiniti. La temperatura base sarà impostata a 180 °C."
+              : "Die individuellen Einstellungen von ${c.model.label} werden auf die Geräte-Standardwerte zurückgesetzt. Die Basis wird auf 180 °C gesetzt."),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Abbrechen'),
+            child: const Text(L.s311),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Zurücksetzen'),
+            child: const Text(L.s105),
           ),
         ],
       ),
@@ -739,11 +753,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
   }
 
   Widget settings() => screen([
-    title(
-      'Ganz nach dir',
-      'Einstellungen',
-      'Lokal gespeichert. Direkt am Gerät wirksam.',
-    ),
+    title(L.s106, L.s324, L.s107),
     block([
       const Text(
         'APP',
@@ -756,7 +766,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
         spacing: 12,
         runSpacing: 12,
         children: [
-          const Text('Temperatureinheit'),
+          const Text(L.s342),
           SegmentedButton<bool>(
             segments: const [
               ButtonSegment(value: false, label: Text('°C')),
@@ -768,20 +778,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
         ],
       ),
       const SizedBox(height: 8),
-      const Text(
-        'Ändert nur die Anzeige in der App.',
-        style: TextStyle(color: muted, fontSize: 12),
-      ),
-      const Divider(),
-      option(
-        'Demo-Modus',
-        kIsWeb
-            ? 'Die Web-Vorschau nutzt simulierte Geräte.'
-            : 'Ohne Hardware alle Ansichten ausprobieren.',
-        c.demo,
-        !kIsWeb && !c.busy && !c.connecting,
-        c.setDemo,
-      ),
+      const Text(L.s108, style: TextStyle(color: muted, fontSize: 12)),
     ]),
     const SizedBox(height: 18),
     CareNotificationSettings(controller: care, onOpen: () => _selectTab(2)),
@@ -797,42 +794,8 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           ),
         ),
         const SizedBox(height: 12),
-        if (c.model != DeviceModel.volcanoHybrid) ...[
-          SettingSlider(
-            label: 'Boost-Offset',
-            value: (c.data['boost'] as num?)?.toDouble(),
-            min: 1,
-            max: c.model.isCrafty
-                ? math
-                      .max(
-                        1,
-                        math.min(99, 210 - (c.data['target'] as num? ?? 180)),
-                      )
-                      .toDouble()
-                : 99,
-            suffix: '°C',
-            enabled:
-                c.enabled('boost') &&
-                (!c.model.isCrafty || (c.data['target'] as num? ?? 210) < 210),
-            onCommit: (v) => c.setBoost(v),
-          ),
-          if (c.model.isQvap)
-            SettingSlider(
-              label: 'Superboost-Offset',
-              value: (c.data['superboost'] as num?)?.toDouble(),
-              min: 1,
-              max: 99,
-              suffix: '°C',
-              enabled: c.enabled('superboost'),
-              onCommit: (v) => c.setBoost(v, superboost: true),
-            ),
-          note(
-            'Offsets werden am Gerät gespeichert. Boost aktivierst du über die Gerätetaste.',
-          ),
-          const Divider(),
-        ],
         SettingSlider(
-          label: 'Helligkeit',
+          label: L.s328,
           value: (c.data['brightness'] as num?)?.toDouble(),
           min: c.model.isQvap ? 1 : 0,
           max: c.model.isQvap ? 9 : 100,
@@ -841,15 +804,15 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           onCommit: c.setBrightness,
         ),
         option(
-          'Vibration',
-          'Rückmeldung des Geräts',
+          L.s349,
+          L.s112,
           c.data['vibration'] as bool?,
           c.enabled('vibration'),
           c.setVibration,
         ),
         if (!c.model.isQvap)
           SettingSlider(
-            label: 'Automatische Abschaltung',
+            label: L.s113,
             value: (c.data['autoOff'] as num?)?.toDouble(),
             min: c.model.isCrafty ? 30 : 60,
             max: c.model.isCrafty ? 300 : 21600,
@@ -860,39 +823,32 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
         if (c.model.isQvap) ...[
           const Divider(),
           option(
-            'Boost-Temperatur halten',
-            'Permanent Boost: kein 90-Sekunden-Rücksprung. Gilt für Boost und Superboost am Gerät; Abschaltung bleibt separat.',
+            L.s114,
+            L.s115,
             c.data['permanentBoost'] as bool?,
             c.enabled('permanentBoost'),
             c.setPermanentBoost,
           ),
-          if (!c.supports('permanentBoost'))
-            note(
-              'Permanent Boost benötigt beim VENTY eine unterstützte Firmware ab 1.08 und einen gültigen Rücklesewert.',
-            ),
+          if (!c.supports('permanentBoost')) note(L.s116),
           option(
-            'Boost-Stufe am Gerät anzeigen',
-            c.model == DeviceModel.venty
-                ? 'Blinkendes °C/°F zeigt Boost und Superboost an.'
-                : 'Geräteeigene Boost-Anzeige aktivieren.',
+            L.s117,
+            c.model == DeviceModel.venty ? L.s118 : L.s119,
             c.data['boostVisualization'] as bool?,
             c.enabled('boostVisualization'),
             c.setBoostVisualization,
           ),
-          note(
-            'Diese Einstellungen werden an das Gerät übertragen. Boost und Superboost aktivierst du danach über die Gerätetaste. Beim Verbinden werden vorhandene Werte ausgelesen.',
-          ),
+          note(L.s120),
 
           option(
-            'Schonend laden',
-            'Reduzierter Ladestrom',
+            L.s121,
+            L.s122,
             c.data['ecoCharge'] as bool?,
             c.enabled('ecoCharge'),
             c.setEco,
           ),
           option(
-            'Ladelimit',
-            'Geräteeigenes Limit für den Akku',
+            L.s331,
+            L.s123,
             c.data['chargeLimit'] as bool?,
             c.enabled('chargeLimit'),
             (v) => c.setEco(v, voltage: true),
@@ -903,23 +859,21 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           OutlinedButton.icon(
             onPressed: c.enabled('factoryReset') ? confirmReset : null,
             icon: const Icon(Icons.restart_alt),
-            label: const Text('Geräteeinstellungen zurücksetzen'),
+            label: const Text(L.s124),
           ),
-          note(
-            'Nur bei ausgeschaltetem Aufheizen. Löscht die individuellen Geräteeinstellungen; keine Firmwareänderung.',
-          ),
+          note(L.s125),
         ],
         if (c.model == DeviceModel.veazy)
           option(
-            'Bluetooth dauerhaft aktiv',
-            'Kann den Akkuverbrauch erhöhen.',
+            L.s126,
+            L.s127,
             c.data['permanentBluetooth'] as bool?,
             c.enabled('permanentBluetooth'),
             c.setPermanentBluetooth,
           ),
       ])
     else
-      note('Verbinde ein Gerät, um seine Einstellungen zu bearbeiten.'),
+      note(L.s128),
     const SizedBox(height: 18),
     block([
       const Text(
@@ -927,45 +881,33 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
         style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 1.8),
       ),
       const SizedBox(height: 8),
+      const Text(L.s353, style: TextStyle(color: muted, fontSize: 12)),
+      note(L.s129),
       const Text(
-        'Version 0.4.0 · Entwicklungsstand',
-        style: TextStyle(color: muted, fontSize: 12),
-      ),
-      note(
-        'Unabhängige Drittanbieter-App. Keine Verbindung zu STORZ & BICKEL. Keine Telemetrie, kein Konto, keine Cloud.',
-      ),
-      const Text(
-        'Firmware-Updates sind in dieser Version nicht enthalten. Reset ist nur für VENTY und VEAZY belegt.',
+        L.s130,
         style: TextStyle(color: muted, fontSize: 12, height: 1.5),
       ),
     ]),
   ]);
   Widget diagnostics() => screen([
-    title(
-      'Ein klarer Blick',
-      'Diagnose',
-      'Verbindungsdaten, Geräteprofil und Ereignisse.',
-    ),
+    title(L.s131, L.s323, L.s132),
     block([
-      _StatusPill(
-        label: c.connected ? 'VERBUNDEN' : 'NICHT VERBUNDEN',
-        active: c.connected,
-      ),
+      _StatusPill(label: c.connected ? L.s346 : L.s133, active: c.connected),
       const SizedBox(height: 20),
       ...{
-        'Modell': c.model.label,
-        'Seriennummer': '${c.data['serial'] ?? '—'}',
-        'Betriebszeit': '${c.data['runtimeMinutes'] ?? '—'} min',
+        L.s332: c.model.label,
+        L.s338: '${c.data['serial'] ?? '—'}',
+        L.s318: '${c.data['runtimeMinutes'] ?? '—'} min',
         'Firmware': '${c.data['firmware'] ?? '—'}',
         'BLE / Bootloader':
             '${c.data['bleFirmware'] ?? c.data['bootloader'] ?? '—'}',
-        'Datenquelle': c.demo ? 'Simulation' : 'Bluetooth LE',
-        'Hardwaretests': 'Ausstehend',
-        'Letzter Status':
+        L.s321: c.demo ? L.s339 : 'Bluetooth LE',
+        L.s327: L.s316,
+        L.s134:
             c.lastStatus?.toLocal().toIso8601String().substring(11, 19) ?? '—',
         if (c.data.containsKey('errorCode'))
-          'Analysecode':
-              '${c.data['errorCode']} / Kategorie ${c.data['errorCategory']}',
+          L.s314:
+              "${c.data['errorCode']} / ${L.italian ? 'Categoria' : 'Kategorie'} ${c.data['errorCategory']}",
       }.entries.map(
         (e) => Padding(
           padding: const EdgeInsets.only(bottom: 14),
@@ -989,15 +931,9 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           ),
         ),
       ),
-      if (c.model.isQvap)
-        note(
-          'Liest die geräteeigene Fehlerkategorie aus. Kein Upload an den Hersteller und keine umfassende Hardwareprüfung.',
-        ),
+      if (c.model.isQvap) note(L.s135),
       if (c.data['fault'] == true)
-        const Text(
-          'Das Gerät meldet einen Fehler. Steuerung gesperrt. Hersteller-Support kontaktieren.',
-          style: TextStyle(color: orange),
-        ),
+        const Text(L.s136, style: TextStyle(color: orange)),
       const SizedBox(height: 8),
       SizedBox(
         width: double.infinity,
@@ -1006,9 +942,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
               ? () => c.refresh(analysis: true)
               : null,
           icon: const Icon(Icons.refresh),
-          label: Text(
-            c.model.isQvap ? 'Geräteanalyse starten' : 'Diagnose aktualisieren',
-          ),
+          label: Text(c.model.isQvap ? L.s137 : L.s138),
         ),
       ),
     ]),
@@ -1017,24 +951,22 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       onPressed: () async {
         await Clipboard.setData(ClipboardData(text: c.diagnosticReport()));
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Diagnose ohne Seriennummer und Geräte-ID kopiert.',
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text(L.s139)));
         }
       },
       icon: const Icon(Icons.copy_outlined),
-      label: const Text('Diagnosebericht kopieren'),
+      label: const Text(L.s140),
     ),
     const SizedBox(height: 20),
     Card(
       child: ExpansionTile(
-        title: const Text('Bluetooth-Dienste', style: TextStyle(fontSize: 15)),
+        title: const Text(L.s319, style: TextStyle(fontSize: 15)),
         subtitle: Text(
-          '${c.fields.map((f) => f.service).toSet().length} Dienste · ${c.fields.length} Merkmale',
+          (L.italian
+              ? "${c.fields.map((f) => f.service).toSet().length} servizi · ${c.fields.length} caratteristiche"
+              : "${c.fields.map((f) => f.service).toSet().length} Dienste · ${c.fields.length} Merkmale"),
           style: const TextStyle(color: muted, fontSize: 12),
         ),
         children: c.fields
@@ -1045,7 +977,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                   style: const TextStyle(fontFamily: 'monospace', fontSize: 11),
                 ),
                 subtitle: Text(
-                  'Lesen ${f.read ? '✓' : '–'} · Schreiben ${f.write || f.writeWithoutResponse ? '✓' : '–'} · Meldungen ${f.notify ? '✓' : '–'}',
+                  "${L.italian ? 'Lettura' : 'Lesen'} ${f.read ? '✓' : '–'} · ${L.italian ? 'Scrittura' : 'Schreiben'} ${f.write || f.writeWithoutResponse ? '✓' : '–'} · ${L.italian ? 'Notifiche' : 'Meldungen'} ${f.notify ? '✓' : '–'}",
                   style: const TextStyle(fontSize: 11, color: muted),
                 ),
               ),
@@ -1056,12 +988,11 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
     const SizedBox(height: 16),
     block([
       const Text(
-        'VERBINDUNGSPROTOKOLL',
+        L.s345,
         style: TextStyle(color: muted, fontSize: 11, letterSpacing: 1.4),
       ),
       const SizedBox(height: 14),
-      if (c.log.isEmpty)
-        const Text('Noch keine Ereignisse', style: TextStyle(color: muted)),
+      if (c.log.isEmpty) const Text(L.s142, style: TextStyle(color: muted)),
       ...c.log
           .take(10)
           .map(
@@ -1078,9 +1009,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             ),
           ),
     ]),
-    note(
-      'Quellenprüfung ersetzt keinen Hardwaretest. Unbekannte Fehlercodes werden unverändert dokumentiert.',
-    ),
+    note(L.s143),
   ]);
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
@@ -1105,6 +1034,25 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             ],
           ),
         ),
+        bottom: isMatteoEdition
+            ? const PreferredSize(
+                preferredSize: Size.fromHeight(28),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(18, 0, 18, 10),
+                    child: Text(
+                      'Il Vape Club di Matteo',
+                      style: TextStyle(
+                        color: orange,
+                        fontSize: 12,
+                        letterSpacing: .7,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : null,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
@@ -1163,26 +1111,87 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           NavigationDestination(
             icon: Icon(Icons.space_dashboard_outlined),
             selectedIcon: Icon(Icons.space_dashboard),
-            label: 'Übersicht',
+            label: L.s144,
           ),
           NavigationDestination(
             icon: Icon(Icons.devices_outlined),
-            label: 'Geräte',
+            label: L.s090,
           ),
           NavigationDestination(
             icon: Icon(Icons.cleaning_services_outlined),
             selectedIcon: Icon(Icons.cleaning_services),
-            label: 'Pflege',
+            label: L.s336,
           ),
           NavigationDestination(
             icon: Icon(Icons.monitor_heart_outlined),
-            label: 'Diagnose',
+            label: L.s323,
           ),
-          NavigationDestination(icon: Icon(Icons.tune), label: 'Optionen'),
+          NavigationDestination(icon: Icon(Icons.tune), label: L.s334),
         ],
       ),
     ),
   );
+}
+
+/// Unmodified manufacturer photos, framed from their original source pixels.
+/// Only blank margins are excluded from the presentation; no generated device.
+class DevicePhoto extends StatelessWidget {
+  const DevicePhoto({super.key, required this.model, this.compact = false});
+  final DeviceModel model;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    if (model == DeviceModel.unknown) {
+      return const Icon(Icons.bluetooth, color: orange, size: 32);
+    }
+    final sourceSize = model == DeviceModel.crafty
+        ? const Size(79, 108)
+        : const Size(700, 700);
+    final bounds = switch (model) {
+      DeviceModel.venty => const Rect.fromLTWH(240, 96, 214, 604),
+      DeviceModel.veazy => const Rect.fromLTWH(276, 214, 150, 472),
+      DeviceModel.craftyPlus => const Rect.fromLTWH(230, 270, 245, 430),
+      DeviceModel.crafty => const Rect.fromLTWH(0, 0, 79, 108),
+      DeviceModel.volcanoHybrid => const Rect.fromLTWH(3, 55, 693, 645),
+      _ => const Rect.fromLTWH(0, 0, 700, 700),
+    };
+    return ExcludeSemantics(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(compact ? 12 : 26),
+        child: ColoredBox(
+          color: Colors.white,
+          child: Padding(
+            padding: EdgeInsets.all(compact ? 5 : 12),
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: SizedBox(
+                width: bounds.width,
+                height: bounds.height,
+                child: ClipRect(
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: -bounds.left,
+                        top: -bounds.top,
+                        width: sourceSize.width,
+                        height: sourceSize.height,
+                        child: Image.asset(
+                          'assets/devices/${model.name}.jpg',
+                          fit: BoxFit.fill,
+                          filterQuality: FilterQuality.medium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _StatusPill extends StatelessWidget {
@@ -1245,6 +1254,146 @@ class DialPainter extends CustomPainter {
       progress != oldDelegate.progress;
 }
 
+class BoostSettings extends StatefulWidget {
+  const BoostSettings({super.key, required this.controller});
+  final AppController controller;
+  @override
+  State<BoostSettings> createState() => _BoostSettingsState();
+}
+
+class _BoostSettingsState extends State<BoostSettings> {
+  int? boostDraft, superDraft, confirmedBoost, confirmedSuper;
+  bool saving = false;
+
+  Future<void> save(int boost, int? superboost) async {
+    setState(() => saving = true);
+    final confirmed = await widget.controller.saveBoostSettings(
+      boost: boost,
+      superboost: superboost,
+    );
+    if (!mounted) return;
+    setState(() {
+      saving = false;
+      if (confirmed) {
+        boostDraft = null;
+        superDraft = null;
+        confirmedBoost = boost;
+        confirmedSuper = superboost;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = widget.controller;
+    final boost = boostDraft ?? (c.data['boost'] as num?)?.round();
+    final superboost = superDraft ?? (c.data['superboost'] as num?)?.round();
+    final maxBoost = c.model.isCrafty
+        ? math
+              .max(1, math.min(99, 210 - (c.data['target'] as num? ?? 210)))
+              .toDouble()
+        : 99.0;
+    final dirty =
+        (boostDraft != null && boostDraft != c.data['boost']) ||
+        (superDraft != null && superDraft != c.data['superboost']);
+    final valid =
+        boost != null &&
+        boost <= maxBoost &&
+        (!c.model.isCrafty || (c.data['target'] as num? ?? 210) < 210);
+    final confirmed =
+        !dirty &&
+        confirmedBoost != null &&
+        confirmedBoost == c.data['boost'] &&
+        (!c.model.isQvap || confirmedSuper == c.data['superboost']);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          L.boostProfile,
+          style: TextStyle(
+            color: muted,
+            fontSize: 10,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        SettingSlider(
+          label: L.s320,
+          showSteps: true,
+          prefix: '+',
+          value: boost?.toDouble(),
+          min: 1,
+          max: maxBoost,
+          suffix: '°C',
+          enabled:
+              c.enabled('boost') &&
+              !saving &&
+              (!c.model.isCrafty || (c.data['target'] as num? ?? 210) < 210),
+          onCommit: (v) => setState(() {
+            boostDraft = v;
+            confirmedBoost = null;
+          }),
+        ),
+        if (c.model.isQvap)
+          SettingSlider(
+            label: L.s341,
+            showSteps: true,
+            prefix: '+',
+            value: superboost?.toDouble(),
+            min: 1,
+            max: 99,
+            suffix: '°C',
+            enabled: c.enabled('superboost') && !saving,
+            onCommit: (v) => setState(() {
+              superDraft = v;
+              confirmedBoost = null;
+            }),
+          ),
+        const SizedBox(height: 6),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            key: const ValueKey('save-boost'),
+            onPressed:
+                dirty &&
+                    valid &&
+                    !saving &&
+                    c.enabled('boost') &&
+                    (!c.model.isQvap ||
+                        (superboost != null && c.enabled('superboost')))
+                ? () => save(boost, c.model.isQvap ? superboost : null)
+                : null,
+            icon: saving
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Icon(
+                    confirmed
+                        ? Icons.check_circle_outline
+                        : Icons.save_outlined,
+                  ),
+            label: Text(saving ? L.boostSaving : L.boostSave),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Semantics(
+          liveRegion: true,
+          child: Text(
+            dirty
+                ? (!valid ? L.boostInvalid : L.boostPending)
+                : confirmed
+                ? L.boostSaved
+                : L.boostLoaded,
+            style: TextStyle(color: dirty ? orange : muted, fontSize: 12),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class SettingSlider extends StatefulWidget {
   const SettingSlider({
     super.key,
@@ -1255,8 +1404,11 @@ class SettingSlider extends StatefulWidget {
     required this.suffix,
     required this.enabled,
     required this.onCommit,
+    this.showSteps = false,
+    this.prefix = '',
   });
-  final String label, suffix;
+  final String label, suffix, prefix;
+  final bool showSteps;
   final double? value;
   final double min, max;
   final bool enabled;
@@ -1289,24 +1441,47 @@ class _SettingSliderState extends State<SettingSlider> {
               Text(
                 widget.value == null
                     ? '—'
-                    : '${current.round()} ${widget.suffix}',
+                    : '${widget.prefix}${current.round()} ${widget.suffix}',
                 style: const TextStyle(color: orange, fontSize: 14),
               ),
             ],
           ),
-          Slider(
-            value: current,
-            min: widget.min,
-            max: max,
-            divisions: (max - widget.min).round(),
-            semanticFormatterCallback: (v) => '${v.round()} ${widget.suffix}',
-            onChanged: active ? (v) => setState(() => draft = v) : null,
-            onChangeEnd: active
-                ? (v) {
-                    setState(() => draft = null);
-                    widget.onCommit(v.round());
-                  }
-                : null,
+          Row(
+            children: [
+              if (widget.showSteps)
+                IconButton(
+                  tooltip: '${widget.label} −1 ${widget.suffix}',
+                  onPressed: active && current > widget.min
+                      ? () => widget.onCommit(current.round() - 1)
+                      : null,
+                  icon: const Icon(Icons.remove, size: 18),
+                ),
+              Expanded(
+                child: Slider(
+                  value: current,
+                  min: widget.min,
+                  max: max,
+                  divisions: (max - widget.min).round(),
+                  semanticFormatterCallback: (v) =>
+                      '${v.round()} ${widget.suffix}',
+                  onChanged: active ? (v) => setState(() => draft = v) : null,
+                  onChangeEnd: active
+                      ? (v) {
+                          setState(() => draft = null);
+                          widget.onCommit(v.round());
+                        }
+                      : null,
+                ),
+              ),
+              if (widget.showSteps)
+                IconButton(
+                  tooltip: '${widget.label} +1 ${widget.suffix}',
+                  onPressed: active && current < widget.max
+                      ? () => widget.onCommit(current.round() + 1)
+                      : null,
+                  icon: const Icon(Icons.add, size: 18),
+                ),
+            ],
           ),
         ],
       ),

@@ -1,11 +1,11 @@
+import '../l10n/strings.dart';
 import '../core/models.dart';
 import 'transport.dart';
 
 BleTransport createNativeTransport() => UnsupportedTransport();
 
 class UnsupportedTransport implements BleTransport {
-  static const message =
-      'Echtes Bluetooth ist in dieser Vorschau nicht verfügbar. Nutze die native iOS- oder Android-App.';
+  static const message = L.s302;
   @override
   Stream<bool> get connection => const Stream.empty();
   @override

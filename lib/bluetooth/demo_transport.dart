@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'dart:async';
 import 'dart:convert';
 import '../core/models.dart';
@@ -151,7 +152,7 @@ class DemoTransport implements BleTransport {
 
   @override
   Future<List<int>> read(GattField field) async {
-    if (!connected) throw StateError('Demo getrennt');
+    if (!connected) throw StateError(L.s300);
     _tick();
     final key = field.id.substring(0, 8);
     if (key == '00000032' || key == '10100003') {
@@ -226,7 +227,7 @@ class DemoTransport implements BleTransport {
 
   @override
   Future<void> write(GattField field, List<int> bytes) async {
-    if (!connected) throw StateError('Demo getrennt');
+    if (!connected) throw StateError(L.s300);
     _tick();
     if (model.isQvap) {
       final cmd = bytes[0], mask = bytes[1];
@@ -293,7 +294,7 @@ class DemoTransport implements BleTransport {
       case '000001b3':
         break;
       default:
-        throw UnsupportedError('Kein Demo-Befehl');
+        throw UnsupportedError(L.s301);
     }
   }
 

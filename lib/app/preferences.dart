@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +26,7 @@ class LocalPreferences implements Preferences {
   Future<void> save(Map<String, dynamic> value) async {
     final p = await SharedPreferences.getInstance();
     if (!await p.setString(key, jsonEncode(value))) {
-      throw StateError('Einstellungen konnten nicht gespeichert werden.');
+      throw StateError(L.s000);
     }
   }
 }

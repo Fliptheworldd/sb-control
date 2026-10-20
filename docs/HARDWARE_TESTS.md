@@ -59,3 +59,12 @@ Freigabe erst nach erfolgreichen dokumentierten Ergebnissen für die tatsächlic
 - Reset abbrechen: kein Write. Bestätigen: Defaults nachlesen und mit Hersteller-App vergleichen; keine Heizaktivierung.
 - Analyse mit bekannten Fehlern und ohne Fehler; kein Cloudverkehr.
 - iOS/Android: Berechtigung verweigert, Bluetooth aus, Scan/Verbindung, App-Hintergrund, Funkverlust, Reconnect ohne Einstellungswrite.
+
+## Zusätzliche Abnahme 0.6.0 — offen
+
+- Beide Aufschläge auf der Steuerungsseite ändern: vor „Auf Gerät speichern“ keine Geräteänderung, danach korrekte Bestätigung und exakte Werte in der Hersteller-App.
+- Bluetooth trennen, App vollständig schließen, Boost und Superboost an der physischen Taste aktivieren. Danach Gerät aus-/einschalten und gespeicherte Aufschläge erneut vergleichen. Reconnect-Simulation beweist keine Persistenz über einen echten Stromzyklus.
+- Verbindung während des Speicherns abbrechen: keine falsche Erfolgsmeldung, keine automatisch wiederholten Writes. Bei Teilübertragung nach Wiederverbindung beide gelesenen Werte prüfen.
+- Gespeichertes und neu gefundenes Gerät antippen: Erfolg öffnet Steuerung, Fehler bleibt in Geräteansicht. Bereits verbundenes Gerät ohne neue Verbindung öffnen.
+- Android-Italienisch: Matteo-Zeile sichtbar; deutsche iPhone-Version ohne diese Zeile. Kein Demo-Einstieg/Schalter auf beiden Telefonen.
+- Originalfotos, Lesbarkeit bei großer Schrift sowie VoiceOver/TalkBack auf den echten Telefonen prüfen.
