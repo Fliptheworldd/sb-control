@@ -1,6 +1,6 @@
 # iPhone-Testbuild 0.4.0 (6)
 
-Stand: 20.10.2026. [GitHub-Actions-Build erfolgreich](https://github.com/Fliptheworldd/sb-control/actions/runs/39350020945), Quellcommit `609a0bfcfefb2f3e50a24a40d5cee9e8c704b00b`.
+Stand: 20.10.2026. [GitHub-Actions-Build erfolgreich](https://github.com/Fliptheworldd/sb-control/actions/runs/39351218993), Quellcommit `4766a26ad9f08a6b7632e4d0068285b149f82159`.
 
 - macOS 15, Flutter 3.35.3; statische Analyse ohne Befund und 24 Flutter-Tests bestanden.
 - Release für physische iPhones erfolgreich gebaut, ohne Signierung und ohne Apple-Zugangsdaten.
@@ -10,12 +10,12 @@ Stand: 20.10.2026. [GitHub-Actions-Build erfolgreich](https://github.com/Flipthe
 
 IPA SHA256:
 ```
-87a5260edb64e9d371e7f01f0a4d8dbd173d5d5908c2e3acbd461aed0be69d2e
+fd6a7ab0e80fff4299c19eb510878b12bfb900f5ca6bc767a8eee27baefba818
 ```
 
 ZIP SHA256:
 ```
-03071403db9a73cadf1ead5dbec4aa4636262d3bfdd93c081d4984e7032c1ef9
+c73353d66303369cf375f1dc58dba98af43e110be7779498f7e4fdae35ed75aa
 ```
 
 Die neue Pflegefunktion ist noch nicht auf einem physischen Telefon abgenommen. Der frühere erfolgreiche VENTY-Test des Nutzers bezog sich auf 0.3.2. Insbesondere Mitteilungsberechtigung, tatsächliche Zustellung und das Öffnen der richtigen Anleitung über eine Mitteilung sind zu prüfen; siehe [Hardwaretests](HARDWARE_TESTS.md).
