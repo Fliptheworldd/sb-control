@@ -39,6 +39,8 @@ Die aktuellen geprüften Unterlagen für VENTY/VEAZY/CRAFTY+ nennen in diesen Re
 
 ## Verifikation und offene Abnahme
 
+Echte Screenshots des Flutter-Webbuilds: [Pflegeübersicht](previews/pflege-uebersicht.png) · [VENTY-Reinigungskarte](previews/venty-reinigung.png). Die Webansicht ist eine Simulation ohne native Bluetooth-Verbindung oder Systemmitteilungen.
+
 Automatisierte Tests prüfen Opt-in, Ausschalten, Rechteentzug/-erteilung, persistierte Reinigung, überfällige Pläne, ungültige Daten, Speicherfehler, überlappende Änderungen und Benachrichtigungspayloads. Widgettests bedienen alle fünf Bildanleitungen bei 320 Pixeln; VENTY zusätzlich mit 150 % Schriftgröße. Bestehende BLE-/Layouttests laufen unverändert mit.
 
 Offen bleiben reale Zustellung bei gesperrtem Telefon, nach Neustart, im Energiesparmodus und bei entzogenem Recht; kalter/warmer App-Start durch Antippen sowie VoiceOver/TalkBack. „Benachrichtigung testen“ in Optionen plant nach bewusster Betätigung einen Testhinweis (frühestens etwa zehn Sekunden; Android kann verzögern). Keine reale Reinigung/Demontage mit allen fünf Geräten durchgeführt. Die vollständige Prüfliste steht in [HARDWARE_TESTS.md](HARDWARE_TESTS.md).

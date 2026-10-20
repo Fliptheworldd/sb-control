@@ -9,9 +9,19 @@ Stand 20.10.2026, Flutter 3.35.3 / Dart 3.9.2. Pflegefunktion neu; BLE-Protokoll
 | Statische Analyse | Keine Probleme |
 | Pflege-Widgetlayouts | Alle fünf Modelle 320×740; VENTY zusätzlich 150 % Schrift, Abschluss nur mit Bestätigung |
 | Erinnerungstests | Opt-in, Aus, Persistenz, OS-Rechte, überfälliger Check, Fehler und konkurrierende Änderungen bestanden |
+| Formatprüfung | 23 Dart-Dateien, keine Änderungen |
+| Flutter-Web-Release | Erfolgreich; lokale Schriften/CanvasKit |
+| Browser: bisherige Gerätebedienung | Bestanden: fünf Modelle, Boost-Einstellungen, Reset, Temperatur, Einheiten, Pumpe und Verbindungsabbruch |
+| Browser: Pflege | Bestanden: VENTY-Karten, Abschlussbestätigung, Speichern, Erinnerung ein/aus, Browser-Neuladen, Modellwechsel und HYBRID bei 320 Pixeln |
+| iPhone-Release 0.4.0 (6) | Erfolgreich erstellt; ZIP/IPA und Prüfsummen geprüft, noch unsigniert |
+| Android-Debug-APK | Erfolgreich erstellt; kein physischer Android-Test |
 | Nativer Benachrichtigungsversand | Noch nicht auf physischem iPhone/Android getestet |
 
-Build-/Browserergebnisse für diesen Stand werden nach Abschluss ergänzt. Vorherige Build-Nachweise beziehen sich auf 0.3.2. Der Nutzer berichtete einen erfolgreichen VENTY-Praxistest von 0.3.2; die neue Pflegefunktion ist darin nicht enthalten. [Quellen und Funktionsgrenzen](CLEANING.md) · [Offene Hardwareprüfungen](HARDWARE_TESTS.md).
+Browser: Chrome Headless Shell 133.0.6943.16, echter kompilierter Flutter-Release. Keine JavaScript-Fehler, fehlgeschlagenen oder externen Requests in beiden vollständigen Läufen. `tool/web_smoke.cjs` scrollt nun zum durch den Pflegeblock tiefer liegenden Boost-Schalter. `tool/care_smoke.cjs` bedient die Pflege über die tatsächlichen Flutter-Semantikrollen. Browser-Screenshots belegen Darstellung, keine native Mitteilungszustellung.
+
+GitHub verifiziert zusätzlich Abhängigkeitssperre, Format, Kernprüfungen, Analyse, Tests und Webbuild: [erfolgreicher Lauf](https://github.com/Fliptheworldd/sb-control/actions/runs/39350459210). [iPhone-Build-Nachweis](IOS_BUILD_RESULT.md). Androids erster Compilerlauf fand eine bereits vorhandene, mit Kotlin 2.3 nicht mehr erlaubte `kotlinOptions.jvmTarget`-Zuweisung. Diese wurde auf die [offizielle `compilerOptions`-DSL](https://kotlinlang.org/docs/gradle-compiler-options.html#migrate-away-from-android-kotlinoptions) umgestellt, ohne JVM-Ziel 17 oder Abhängigkeiten zu ändern. Der erneute [Android-Lauf](https://github.com/Fliptheworldd/sb-control/actions/runs/39350459397) ist erfolgreich: `app-debug.apk` als Artefakt `sb-control-android-debug`, noch ohne physische Installation.
+
+Der Nutzer berichtete einen erfolgreichen VENTY-Praxistest von 0.3.2; die neue Pflegefunktion ist darin nicht enthalten. [Quellen und Funktionsgrenzen](CLEANING.md) · [Offene Hardwareprüfungen](HARDWARE_TESTS.md).
 
 ## Historischer Testbericht · SB CONTROL 0.3.2
 

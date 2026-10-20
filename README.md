@@ -4,7 +4,7 @@ Native Flutter-App für iOS und Android auf Basis des gelieferten Quellcodes v0.
 
 **Automatisiert und in Simulation getestet.** Der Nutzer berichtet einen erfolgreichen VENTY-Test auf seinem iPhone mit 0.3.2; eine dokumentierte Hardware-Abnahme aller Modelle fehlt. Bluetooth-Befehle sind gegen die öffentliche STORZ & BICKEL Web-App v3.4.1 geprüft. Das ist keine Herstellerfreigabe oder Garantie für alle Firmwarestände.
 
-**Bisheriger iPhone-Testbuild:** Version 0.3.2 (5), siehe [Build-Nachweis](docs/IOS_BUILD_RESULT.md). Der neue Stand 0.4.0 (6) ergänzt Pflege; sein Build- und Teststatus steht im [Testbericht](docs/TEST_REPORT.md). [Installation über Windows](docs/IPHONE_WINDOWS.md).
+**iPhone-Testbuild 0.4.0 (6) erfolgreich erstellt:** Die unsignierte IPA enthält den neuen Pflegebereich. [Build-Nachweis und Prüfsumme](docs/IOS_BUILD_RESULT.md) · [Testbericht](docs/TEST_REPORT.md) · [Installation über Windows](docs/IPHONE_WINDOWS.md).
 
 ## Neu in 0.4.0
 

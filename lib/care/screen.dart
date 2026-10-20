@@ -457,6 +457,7 @@ class _CareWizardState extends State<CareWizard> {
                         borderRadius: BorderRadius.circular(6),
                         child: LinearProgressIndicator(
                           value: (index + 1) / count,
+                          backgroundColor: const Color(0xFF3A3029),
                           minHeight: 4,
                         ),
                       ),
