@@ -1,6 +1,13 @@
 name: iPhone IPA for local signing
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'lib/**'
+      - 'ios/**'
+      - 'assets/**'
+      - 'pubspec.*'
+      - '.github/workflows/ios-device.yml'
   push:
     branches: [main]
     paths:

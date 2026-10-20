@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import '../app/controller.dart';
 import '../core/models.dart';
 import '../core/protocol.dart';
+import '../app/preferences.dart';
+import '../care/controller.dart';
+import '../care/screen.dart';
 
 const orange = Color(0xFFFF7A28);
 const panel = Color(0xFF1B1E23);
@@ -13,8 +16,9 @@ const muted = Color(0xFFA7ABB3);
 const canvas = Color(0xFF101216);
 
 class SbControlApp extends StatelessWidget {
-  const SbControlApp({super.key, required this.controller});
+  const SbControlApp({super.key, required this.controller, this.care});
   final AppController controller;
+  final CareController? care;
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -66,34 +70,63 @@ class SbControlApp extends StatelessWidget {
       sliderTheme: const SliderThemeData(trackHeight: 5),
       dividerTheme: const DividerThemeData(color: Color(0xFF30333A), space: 28),
     ),
-    home: ControlHome(controller: controller),
+    home: ControlHome(controller: controller, care: care),
   );
 }
 
 class ControlHome extends StatefulWidget {
-  const ControlHome({super.key, required this.controller});
+  const ControlHome({super.key, required this.controller, this.care});
   final AppController controller;
+  final CareController? care;
   @override
   State<ControlHome> createState() => _ControlHomeState();
 }
 
 class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
   int tab = 0;
+  late final CareController care;
+  DeviceModel careModel = DeviceModel.venty;
   AppController get c => widget.controller;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    care = widget.care ?? CareController(preferences: MemoryPreferences());
+    if (widget.care == null) unawaited(care.initialize());
+    care.addListener(_openCareFromNotification);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _openCareFromNotification(),
+    );
   }
+
+  void _openCareFromNotification() {
+    if (!mounted || care.openModel == null) return;
+    final model = care.consumeOpenModel()!;
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    setState(() {
+      careModel = model;
+      tab = 2;
+    });
+  }
+
+  void _selectTab(int value) => setState(() {
+    if (value == 2 && tab != 2 && c.model != DeviceModel.unknown) {
+      careModel = c.model;
+    }
+    tab = value;
+  });
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    care.removeListener(_openCareFromNotification);
+    if (widget.care == null) care.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) unawaited(care.refreshPermission());
     // No background control or silent command replay on resume.
     if (state == AppLifecycleState.paused && !c.demo) {
       unawaited(
@@ -751,6 +784,8 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       ),
     ]),
     const SizedBox(height: 18),
+    CareNotificationSettings(controller: care, onOpen: () => _selectTab(2)),
+    const SizedBox(height: 18),
     if (c.connected)
       block([
         Text(
@@ -893,7 +928,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       ),
       const SizedBox(height: 8),
       const Text(
-        'Version 0.3.2 · Entwicklungsstand',
+        'Version 0.4.0 · Entwicklungsstand',
         style: TextStyle(color: muted, fontSize: 12),
       ),
       note(
@@ -1111,7 +1146,8 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                   child: switch (tab) {
                     0 => dashboard(),
                     1 => devices(),
-                    2 => diagnostics(),
+                    2 => CareScreen(controller: care, initialModel: careModel),
+                    3 => diagnostics(),
                     _ => settings(),
                   },
                 ),
@@ -1122,7 +1158,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: tab,
-        onDestinationSelected: (v) => setState(() => tab = v),
+        onDestinationSelected: _selectTab,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.space_dashboard_outlined),
@@ -1132,6 +1168,11 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
           NavigationDestination(
             icon: Icon(Icons.devices_outlined),
             label: 'Geräte',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.cleaning_services_outlined),
+            selectedIcon: Icon(Icons.cleaning_services),
+            label: 'Pflege',
           ),
           NavigationDestination(
             icon: Icon(Icons.monitor_heart_outlined),

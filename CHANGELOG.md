@@ -1,11 +1,21 @@
+# Änderungen
+
+## 0.4.0 — 20.10.2026
+
+- Offline-Pflegebereich mit schematischen Bildkarten für VENTY, VEAZY, CRAFTY, CRAFTY+ und VOLCANO HYBRID.
+- Modellbezogene Herstellerquellen, Reinigungsmittelgrenzen und Besonderheiten beim Zerlegen/Zusammenbauen.
+- Lokale iOS-/Android-Erinnerungen nach ausdrücklichem Einschalten; automatisch wöchentlich, ohne Intervall-/Uhrzeitwahl oder Kalender.
+- Bestätigte Reinigung startet den Pflegecheck neu; Hinweise global und pro Modell abschaltbar. Berechtigungsfehler bleiben sichtbar.
+- Keine neuen Bluetooth-Befehle, kein behaupteter Verbrauchszähler, kein Hintergrundzugriff auf das Gerät.
+- 24 Flutter-Tests inklusive Pflege, Berechtigungen, Speicherfehlern, konkurrierenden Änderungen und kleinen Displays; 56 Protokollprüfungen.
+- Pull Requests erhalten einen unsignierten iPhone-Build und Android-Debug-Build zur Integrationsprüfung.
+
 ## 0.3.2
 - Geräteeinstellungen statt lokaler App-Boost-Stufen; vorhandene Werte beim Verbinden auslesen.
 - QVAP Permanent Boost, modellabhängige Boost-Anzeige, bestätigter Reset mit Rücklesen.
 - Seriennummer und Betriebszeit in der Geräteansicht; Seriennummer bleibt aus Diagnoseexporten entfernt.
 - Geräteanalyse liest QVAP-Fehlerkategorie; keine Hersteller-Cloudübertragung.
 - 24 Herstellervektoren, 56 Kernprüfungen, 10 Flutter-Tests; Hardwareabnahme weiter offen.
-
-# Änderungen
 
 ## 0.3.1 — 19.10.2026
 

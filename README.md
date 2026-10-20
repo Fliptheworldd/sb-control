@@ -1,10 +1,19 @@
-# SB CONTROL · 0.3.2
+# SB CONTROL · 0.4.0
 
 Native Flutter-App für iOS und Android auf Basis des gelieferten Quellcodes v0.2. Dunkles Design mit Orange, lokale Geräteverwaltung und direkte Bluetooth-LE-Kommunikation ohne Konto oder Backend.
 
-**Implementiert und in Simulation getestet. Kein physisches Gerät wurde getestet.** Bluetooth-Befehle sind gegen die öffentliche STORZ & BICKEL Web-App v3.4.1 geprüft. Das ist keine Herstellerfreigabe oder Garantie für alle Firmwarestände.
+**Automatisiert und in Simulation getestet.** Der Nutzer berichtet einen erfolgreichen VENTY-Test auf seinem iPhone mit 0.3.2; eine dokumentierte Hardware-Abnahme aller Modelle fehlt. Bluetooth-Befehle sind gegen die öffentliche STORZ & BICKEL Web-App v3.4.1 geprüft. Das ist keine Herstellerfreigabe oder Garantie für alle Firmwarestände.
 
-**iPhone-Testbuild erfolgreich erstellt:** Release für echte iPhones, Version 0.3.2 (5), noch unsigniert. [Build-Nachweis](docs/IOS_BUILD_RESULT.md) · [Installation über Windows](docs/IPHONE_WINDOWS.md).
+**iPhone-Testbuild 0.4.0 (6) erfolgreich erstellt:** Die unsignierte IPA enthält den neuen Pflegebereich. [Build-Nachweis und Prüfsumme](docs/IOS_BUILD_RESULT.md) · [Testbericht](docs/TEST_REPORT.md) · [Installation über Windows](docs/IPHONE_WINDOWS.md).
+
+## Neu in 0.4.0
+
+- Tab „Pflege“ mit eigenen schematischen Bildern und einzelnen Anleitungskarten für alle fünf Modelle, offline und ohne Bluetooth bedienbar.
+- Herstellerspezifische Hilfsmittel, Demontage, Reinigungsmittelgrenzen und Montagehinweise; Originalquellen direkt erreichbar.
+- Abschaltbare lokale App-Benachrichtigung zum automatischen Wochencheck. Keine Kalenderanbindung, kein Server und keine Auswahl von Intervall oder Uhrzeit.
+- „Alles trocken und geprüft“ bestätigt die Reinigung und setzt den Check zurück. Nutzung ohne App wird nicht als gemessener Verbrauch ausgegeben.
+
+Details zu Herstellervorgaben, Erinnerungslogik und Grenzen: [Pflege und Reinigung](docs/CLEANING.md).
 
 ## Neu in 0.3.2
 
@@ -17,6 +26,7 @@ VENTY: Permanent Boost ist auf erkannte 1.xx-Firmware ab 1.08 mit gültiger Eins
 - Geräte suchen, verbinden, lokal benennen, speichern und entfernen; erneute Verbindung bewusst durch Antippen.
 - Dashboard mit Zieltemperatur, Aufheizen, verfügbaren Messwerten, Akku, Abschaltung und Betriebszeit; HYBRID zusätzlich mit Pumpenschalter.
 - Modellabhängige Einstellungen und Diagnose mit Firmware, GATT-Tabelle, Ereignissen und kopierbarem JSON ohne Gerätename, Geräteadresse oder Seriennummer.
+- Illustrierte Pflegeanleitungen, lokale Reinigungshistorie und opt-in App-Erinnerungen.
 - Expliziter Demo-Modus mit fünf simulierten Geräten. Bluetoothfehler wechseln niemals automatisch zur Simulation.
 - Vollständige iOS-/Android-Hosts, kompilierte Web-Demo, Tests und GitHub-Actions-Workflows.
 
@@ -71,11 +81,12 @@ Schrift und CanvasKit sind lokal eingebunden. Der Webbuild ist eine Bedienvorsch
 - [Protokolle, Quellen und Byteformate](docs/PROTOCOLS.md)
 - [Testbericht und Grenzen](docs/TEST_REPORT.md)
 - [Hardware-Abnahmeplan](docs/HARDWARE_TESTS.md)
+- [Reinigungsquellen und Erinnerungen](docs/CLEANING.md)
 - [Builds, Signierung und GitHub](docs/BUILD.md)
 - [Architektur](docs/ARCHITECTURE.md)
 - [Änderungen](CHANGELOG.md) und [Herkunft/Lizenzen](NOTICE.md)
 
-Bei Verbindungsabbruch oder Hintergrundwechsel hält die App ihre Steuerung an. Das ist **kein bestätigter Ausschaltbefehl an das Gerät**. Das Gerät und seine eigene Abschaltung bleiben maßgeblich. Firmware-Updates, Factory Reset, Cloud-Diagnose und automatische Heizabläufe sind nicht implementiert.
+Bei Verbindungsabbruch oder Hintergrundwechsel hält die App ihre Steuerung an. Das ist **kein bestätigter Ausschaltbefehl an das Gerät**. Das Gerät und seine eigene Abschaltung bleiben maßgeblich. Firmware-Updates, Cloud-Diagnose und automatische Heizabläufe sind nicht implementiert. Der explizit bestätigte Einstellungen-Reset ist auf freigegebene VENTY-/VEAZY-Profile beschränkt.
 
 ## iPhone-Test mit Windows
 
