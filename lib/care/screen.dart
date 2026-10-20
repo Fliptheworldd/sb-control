@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,7 +56,7 @@ class _CareScreenState extends State<CareScreen> {
         padding: const EdgeInsets.fromLTRB(22, 16, 22, 28),
         children: [
           const Text(
-            'PFLEGE',
+            L.s335,
             style: TextStyle(
               color: _accent,
               letterSpacing: 2,
@@ -65,21 +66,18 @@ class _CareScreenState extends State<CareScreen> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Sauber. Startklar.',
+            L.s147,
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Dein Gerät. Eine Anleitung, Schritt für Schritt.',
-            style: TextStyle(color: _muted),
-          ),
+          const Text(L.s148, style: TextStyle(color: _muted)),
           const SizedBox(height: 20),
           DropdownButtonFormField<DeviceModel>(
             initialValue: model,
             key: ValueKey('care-model-${model.name}'),
             isExpanded: true,
             decoration: const InputDecoration(
-              labelText: 'Gerät auswählen',
+              labelText: L.s149,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
@@ -107,7 +105,7 @@ class _CareScreenState extends State<CareScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    overdue ? 'Zeit für deinen Pflegecheck' : 'Pflege im Blick',
+                    overdue ? L.s150 : L.s151,
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 19,
@@ -119,13 +117,17 @@ class _CareScreenState extends State<CareScreen> {
             const SizedBox(height: 14),
             Text(
               plan?.cleanedAt == null
-                  ? 'Noch keine Reinigung gespeichert.'
-                  : 'Zuletzt gereinigt: ${careDate(plan!.cleanedAt!)}',
+                  ? L.s152
+                  : (L.italian
+                        ? "Ultima pulizia: ${careDate(plan!.cleanedAt!)}"
+                        : "Zuletzt gereinigt: ${careDate(plan!.cleanedAt!)}"),
             ),
             if (plan != null) ...[
               const SizedBox(height: 6),
               Text(
-                'Nächster Pflegecheck: ${careDate(plan.dueAt)}',
+                (L.italian
+                    ? "Prossimo controllo: ${careDate(plan.dueAt)}"
+                    : "Nächster Pflegecheck: ${careDate(plan.dueAt)}"),
                 style: const TextStyle(color: _muted),
               ),
             ],
@@ -145,23 +147,19 @@ class _CareScreenState extends State<CareScreen> {
                     ),
                   );
                   if (context.mounted && saved == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Reinigung gespeichert. Dein Pflegecheck beginnt neu.',
-                        ),
-                      ),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(const SnackBar(content: Text(L.s155)));
                   }
                 },
                 icon: const Icon(Icons.play_arrow_rounded),
-                label: const Text('Bildanleitung starten'),
+                label: const Text(L.s156),
               ),
             ),
             TextButton.icon(
               onPressed: () => _showSources(context, guide),
               icon: const Icon(Icons.menu_book_outlined, size: 18),
-              label: const Text('Herstellerangaben ansehen'),
+              label: const Text(L.s157),
             ),
           ]),
           const SizedBox(height: 16),
@@ -169,26 +167,25 @@ class _CareScreenState extends State<CareScreen> {
             SwitchListTile.adaptive(
               contentPadding: EdgeInsets.zero,
               title: const Text(
-                'An Reinigung erinnern',
+                L.s158,
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
               subtitle: Text(
-                'Wöchentlicher Pflegecheck für ${model.label}. Direkt von SB CONTROL.',
+                (L.italian
+                    ? "Controllo settimanale per ${model.label}. Direttamente da SB CONTROL."
+                    : "Wöchentlicher Pflegecheck für ${model.label}. Direkt von SB CONTROL."),
               ),
               value: plan?.remind == true,
               onChanged: c.busy ? null : (value) => c.setReminder(model, value),
             ),
             const Text(
-              'Kein Kalender, keine Zeiteinstellung. Bei sichtbaren Ablagerungen früher reinigen. Die App misst keinen Verschmutzungsgrad und zählt keine Köpfe.',
+              L.s160,
               style: TextStyle(color: _muted, fontSize: 12, height: 1.5),
             ),
             if (plan?.remind == true && !c.notificationsEnabled)
               const Padding(
                 padding: EdgeInsets.only(top: 12),
-                child: Text(
-                  'Benachrichtigungen sind in den Optionen ausgeschaltet.',
-                  style: TextStyle(color: _accent),
-                ),
+                child: Text(L.s161, style: TextStyle(color: _accent)),
               ),
             _permissionNotice(c),
           ]),
@@ -202,7 +199,7 @@ class _CareScreenState extends State<CareScreen> {
             ),
           const SizedBox(height: 12),
           const Text(
-            'Ein Pflegeplan je Modell. Die Anleitung funktioniert auch ohne Bluetooth-Verbindung.',
+            L.s162,
             style: TextStyle(color: _muted, fontSize: 12, height: 1.5),
           ),
         ],
@@ -226,7 +223,7 @@ Widget _permissionNotice(CareController c) {
     return const Padding(
       padding: EdgeInsets.only(top: 12),
       child: Text(
-        'Vorschau: Der Pflegeplan lässt sich ausprobieren. System-Benachrichtigungen gibt es in der iPhone- und Android-App.',
+        L.s163,
         style: TextStyle(color: _muted, fontSize: 12, height: 1.5),
       ),
     );
@@ -236,21 +233,15 @@ Widget _permissionNotice(CareController c) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Mitteilungen sind im System nicht erlaubt. Der Pflegecheck bleibt in der App sichtbar.',
+          L.s164,
           style: TextStyle(color: Color(0xFFFFB690), fontSize: 12),
         ),
-        TextButton(
-          onPressed: openAppSettings,
-          child: const Text('Systemeinstellungen öffnen'),
-        ),
+        TextButton(onPressed: openAppSettings, child: const Text(L.s165)),
       ],
     );
   }
   if (c.notificationsEnabled && c.permission == ReminderAccess.unavailable) {
-    return const Text(
-      'Benachrichtigungen momentan nicht verfügbar.',
-      style: TextStyle(color: _muted),
-    );
+    return const Text(L.s166, style: TextStyle(color: _muted));
   }
   return const SizedBox.shrink();
 }
@@ -268,29 +259,29 @@ class CareNotificationSettings extends StatelessWidget {
     animation: controller,
     builder: (context, _) => _card([
       const Text(
-        'PFLEGE',
+        L.s335,
         style: TextStyle(color: _muted, letterSpacing: 1.8, fontSize: 11),
       ),
       SwitchListTile.adaptive(
         contentPadding: EdgeInsets.zero,
-        title: const Text('Pflege-Benachrichtigungen'),
-        subtitle: const Text(
-          'Ausschalten stoppt alle geplanten Reinigungserinnerungen.',
-        ),
+        title: const Text(L.s337),
+        subtitle: const Text(L.s167),
         value: controller.notificationsEnabled,
         onChanged: controller.busy ? null : controller.setNotifications,
       ),
       Text(
         controller.enabledCount == 0
-            ? 'Wähle im Pflegebereich, für welches Gerät du erinnert werden möchtest.'
-            : '${controller.enabledCount} Modell(e) vorgemerkt. Ohne Konto, Kalender oder Cloud.',
+            ? L.s168
+            : (L.italian
+                  ? "${controller.enabledCount} modelli selezionati. Senza account, calendario o cloud."
+                  : "${controller.enabledCount} Modell(e) vorgemerkt. Ohne Konto, Kalender oder Cloud."),
         style: const TextStyle(color: _muted, fontSize: 12, height: 1.5),
       ),
       _permissionNotice(controller),
       TextButton.icon(
         onPressed: onOpen,
         icon: const Icon(Icons.cleaning_services_outlined),
-        label: const Text('Pflege öffnen'),
+        label: const Text(L.s170),
       ),
       if (controller.notificationsEnabled && controller.supportsNotifications)
         TextButton(
@@ -307,16 +298,12 @@ class CareNotificationSettings extends StatelessWidget {
                   if (context.mounted &&
                       controller.error.isEmpty &&
                       controller.permission == ReminderAccess.allowed) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Testerinnerung geplant. Das System kann sie verzögert anzeigen.',
-                        ),
-                      ),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(const SnackBar(content: Text(L.s171)));
                   }
                 },
-          child: const Text('Benachrichtigung testen'),
+          child: const Text(L.s172),
         ),
       if (controller.error.isNotEmpty)
         Text(
@@ -343,14 +330,13 @@ Future<void> _showSources(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${guide.model.label}: Originalanleitungen',
+              (L.italian
+                  ? "${guide.model.label}: guide originali"
+                  : "${guide.model.label}: Originalanleitungen"),
               style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Nach Herstellerunterlagen geprüft am 20.10.2026. Unsere Zeichnungen sind schematisch. Für die genaue Bauteilansicht nutze die Originalanleitung.',
-              style: TextStyle(color: _muted, height: 1.5),
-            ),
+            const Text(L.s174, style: TextStyle(color: _muted, height: 1.5)),
             const SizedBox(height: 12),
             for (final source in guide.sources)
               ListTile(
@@ -369,13 +355,9 @@ Future<void> _showSources(
                     /* Keep the app usable if no browser is available. */
                   }
                   if (sheetContext.mounted) {
-                    ScaffoldMessenger.of(sheetContext).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Die Herstellerseite konnte nicht geöffnet werden.',
-                        ),
-                      ),
-                    );
+                    ScaffoldMessenger.of(
+                      sheetContext,
+                    ).showSnackBar(const SnackBar(content: Text(L.s175)));
                   }
                 },
               ),
@@ -417,12 +399,14 @@ class _CareWizardState extends State<CareWizard> {
     builder: (context, _) => Scaffold(
       appBar: AppBar(
         title: Text(
-          '${g.model.label} reinigen',
+          (L.italian
+              ? "Pulizia di ${g.model.label}"
+              : "${g.model.label} reinigen"),
           style: const TextStyle(fontSize: 18),
         ),
         actions: [
           IconButton(
-            tooltip: 'Herstellerangaben',
+            tooltip: L.s329,
             onPressed: () => _showSources(context, g),
             icon: const Icon(Icons.menu_book_outlined),
           ),
@@ -441,10 +425,12 @@ class _CareWizardState extends State<CareWizard> {
                     children: [
                       Text(
                         index == 0
-                            ? 'DEINE VORBEREITUNG'
+                            ? L.s177
                             : index == count - 1
-                            ? 'ZUM ABSCHLUSS'
-                            : 'SCHRITT $index VON ${g.steps.length}',
+                            ? L.s178
+                            : (L.italian
+                                  ? "PASSAGGIO $index DI ${g.steps.length}"
+                                  : "SCHRITT $index VON ${g.steps.length}"),
                         style: const TextStyle(
                           color: _accent,
                           letterSpacing: 1.5,
@@ -512,10 +498,10 @@ class _CareWizardState extends State<CareWizard> {
                               : () => go(index + 1),
                           child: Text(
                             index == count - 1
-                                ? 'Reinigung speichern'
+                                ? L.s180
                                 : index == 0
-                                ? 'Los geht’s'
-                                : 'Weiter',
+                                ? L.s181
+                                : L.s350,
                           ),
                         ),
                       ),
@@ -536,7 +522,7 @@ class _CareWizardState extends State<CareWizard> {
       CareIllustration(model: g.model, art: CareArt.tools),
       const SizedBox(height: 22),
       const Text(
-        'Das brauchst du',
+        L.s182,
         style: TextStyle(fontSize: 27, fontWeight: FontWeight.w800),
       ),
       const SizedBox(height: 14),
@@ -555,7 +541,7 @@ class _CareWizardState extends State<CareWizard> {
           ),
         ),
       const Text(
-        'Die Anleitung zeigt dir nur die Reinigung der vorgesehenen, abnehmbaren Teile. Öffne das Gehäuse des Grundgeräts nicht.',
+        L.s183,
         style: TextStyle(color: _muted, fontSize: 13, height: 1.5),
       ),
     ],
@@ -604,19 +590,16 @@ class _CareWizardState extends State<CareWizard> {
       CareIllustration(model: g.model, art: CareArt.assemble),
       const SizedBox(height: 22),
       const Text(
-        'Alles wieder bereit?',
+        L.s184,
         style: TextStyle(fontSize: 27, fontWeight: FontWeight.w800),
       ),
       const SizedBox(height: 12),
-      const Text(
-        'Speichere die Reinigung erst, wenn alle Teile trocken, geprüft und richtig zusammengesetzt sind. Dann beginnt dein wöchentlicher Pflegecheck neu.',
-        style: TextStyle(height: 1.55),
-      ),
+      const Text(L.s185, style: TextStyle(height: 1.55)),
       const SizedBox(height: 12),
       CheckboxListTile(
         contentPadding: EdgeInsets.zero,
         controlAffinity: ListTileControlAffinity.leading,
-        title: const Text('Alles trocken und geprüft'),
+        title: const Text(L.s186),
         value: checked,
         onChanged: (value) => setState(() => checked = value == true),
       ),
@@ -627,7 +610,7 @@ class _CareWizardState extends State<CareWizard> {
         ),
       const SizedBox(height: 10),
       const Text(
-        'Das Speichern startet das Gerät nicht. Es verschickt auch keine zusätzliche „Reinigung fertig“-Benachrichtigung.',
+        L.s187,
         style: TextStyle(color: _muted, fontSize: 12, height: 1.5),
       ),
     ],

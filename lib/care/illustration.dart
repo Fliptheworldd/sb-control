@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../core/models.dart';
@@ -10,7 +11,9 @@ class CareIllustration extends StatelessWidget {
   final CareArt art;
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'Schematische Illustration: ${model.label}, Pflegeschritt',
+    label: (L.italian
+        ? "Illustrazione schematica: ${model.label}, fase di pulizia"
+        : "Schematische Illustration: ${model.label}, Pflegeschritt"),
     child: ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: AspectRatio(
@@ -179,7 +182,7 @@ class _CarePainter extends CustomPainter {
         box(212, 120, 74, 33, const Color(0xFF687B8B));
         ring(239, 93, 15);
         screen(283, 76, 18);
-        text('PINSEL · TUCH · REINIGER', 89, 174, color: orange);
+        text(L.s284, 89, 174, color: orange);
       case CareArt.power:
         device(62, 28);
         ring(252, 100, 28);
@@ -191,7 +194,7 @@ class _CarePainter extends CustomPainter {
           ink(orange, stroke: 4),
         );
         line(252, 78, 252, 98, orange, 4);
-        text('AUS + ABGEKÜHLT', 209, 148, color: orange);
+        text(L.s285, 209, 148, color: orange);
       case CareArt.mouthpiece:
         device(104, 49);
         box(215, 45, 51, 10, orange, 5);
@@ -200,7 +203,7 @@ class _CarePainter extends CustomPainter {
       case CareArt.cap:
         device(86, 55, separated: true);
         arrow(243, 105, 51);
-        text('LÖSEN', 222, 131, color: orange);
+        text(L.s286, 222, 131, color: orange);
       case CareArt.parts:
         box(68, 56, 78, 22, const Color(0xFF6C7C87), 9);
         box(73, 111, 73, 24, const Color(0xFF47535F), 9);
@@ -208,21 +211,14 @@ class _CarePainter extends CustomPainter {
         screen(281, 76, 21);
         ring(203, 130, 13);
         screen(263, 138, 17);
-        text(
-          model.isCrafty ? 'RIEGEL SEPARAT ABLEGEN' : 'TEILE GEORDNET ABLEGEN',
-          85,
-          177,
-          color: orange,
-        );
+        text(model.isCrafty ? L.s287 : L.s288, 85, 177, color: orange);
       case CareArt.brush:
         screen(135, 115, 37);
         brush(203, 44);
         c.drawCircle(const Offset(107, 167), 3, ink(orange));
         c.drawCircle(const Offset(124, 175), 2, ink(orange));
         text(
-          model == DeviceModel.volcanoHybrid
-              ? 'HEIZELEMENT: NUR WASSER'
-              : 'SIEBE VORSICHTIG SÄUBERN',
+          model == DeviceModel.volcanoHybrid ? L.s289 : L.s290,
           79,
           187,
           color: orange,
@@ -243,7 +239,7 @@ class _CarePainter extends CustomPainter {
         ring(132, 119, 20);
         screen(207, 132, 25);
         box(219, 94, 30, 11, const Color(0xFF9DAEB8), 3);
-        text('NUR AUSGEBAUTE TEILE', 103, 188, color: blue);
+        text(L.s291, 103, 188, color: blue);
       case CareArt.rinse:
         box(90, 44, 126, 20, const Color(0xFF8598A7), 6);
         box(195, 51, 24, 28, const Color(0xFF8598A7), 4);
@@ -261,7 +257,7 @@ class _CarePainter extends CustomPainter {
           line(x, 59, x, 78, blue, 2);
           line(x - 6, 68, x + 6, 68, blue, 2);
         }
-        text('VOLLSTÄNDIG TROCKNEN', 102, 182, color: blue);
+        text(L.s292, 102, 182, color: blue);
       case CareArt.assemble:
         device(82, 30);
         ring(257, 105, 28, const Color(0xFF8CD7BA));
@@ -277,7 +273,7 @@ class _CarePainter extends CustomPainter {
           ..moveTo(230, 64)
           ..cubicTo(331, 45, 176, 159, 278, 154);
         c.drawPath(tube, ink(orange, stroke: 10));
-        text('AUSTAUSCHEN', 210, 177, color: orange);
+        text(L.s352, 210, 177, color: orange);
     }
     text('SCHEMA', 16, 199, size: 8, color: const Color(0xFF7F8C98));
     c.restore();

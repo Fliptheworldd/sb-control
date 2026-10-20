@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'dart:async';
 
 /// GATT requests are serialized. Invalidating a connection cancels queued work.
@@ -15,7 +16,7 @@ class SerialQueue {
   Future<T> run<T>(Future<T> Function() action) {
     final token = _generation;
     final result = _tail.then((_) {
-      if (!isCurrent(token)) throw StateError('Verbindung wurde geändert');
+      if (!isCurrent(token)) throw StateError(L.s001);
       return action();
     });
     _tail = result.then<void>((_) {}, onError: (Object _, StackTrace __) {});

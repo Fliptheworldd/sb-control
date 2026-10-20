@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'package:flutter/foundation.dart';
 import '../app/preferences.dart';
 import '../core/models.dart';
@@ -94,8 +95,7 @@ class CareController extends ChangeNotifier {
       if (initial != null) openModel = initial;
       await _sync();
     } catch (_) {
-      error =
-          'Pflege-Erinnerungen konnten nicht geladen werden. Bitte erneut versuchen.';
+      error = L.s145;
     }
     notifyListeners();
   }
@@ -136,8 +136,7 @@ class CareController extends ChangeNotifier {
       try {
         await action();
       } catch (_) {
-        error =
-            'Änderung nicht vollständig gespeichert oder Erinnerung nicht geplant. Bitte erneut versuchen.';
+        error = L.s146;
       } finally {
         busy = false;
         notifyListeners();

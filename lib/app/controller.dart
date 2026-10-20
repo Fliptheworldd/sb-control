@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
@@ -32,7 +33,7 @@ class AppController extends ChangeNotifier {
       connected = false,
       busy = false;
   bool fahrenheit = false;
-  String status = 'Bereit', error = '';
+  String status = L.s317, error = '';
   DeviceModel model = DeviceModel.unknown;
   NearbyDevice? active;
   List<GattField> fields = [];
@@ -57,7 +58,7 @@ class AppController extends ChangeNotifier {
     if (!connected ||
         _operationGeneration == null ||
         !_queue.isCurrent(_operationGeneration!)) {
-      throw StateError('Verbindung wurde geändert');
+      throw StateError(L.s001);
     }
   }
 
@@ -122,14 +123,10 @@ class AppController extends ChangeNotifier {
     _transport = demo ? DemoTransport() : _nativeFactory();
     _link = _transport!.connection.listen((up) {
       if (!up && (connected || connecting)) {
-        unawaited(
-          disconnect(
-            message: 'Verbindung verloren. Zum Fortsetzen erneut verbinden.',
-          ),
-        );
+        unawaited(disconnect(message: L.s002));
       }
     });
-    status = demo ? 'Demo · simulierte Geräte' : 'Bereit zur Gerätesuche';
+    status = demo ? L.s003 : L.s004;
     notifyListeners();
     if (demo) {
       for (final d in DemoTransport.devices) {
@@ -145,7 +142,7 @@ class AppController extends ChangeNotifier {
     error = '';
     found.clear();
     scanning = true;
-    status = 'Suche läuft …';
+    status = L.s005;
     notifyListeners();
     _scan = _transport!.scan().listen(
       (device) {
@@ -156,7 +153,7 @@ class AppController extends ChangeNotifier {
       },
       onError: (Object e) {
         error = '$e';
-        _event('Gerätesuche fehlgeschlagen');
+        _event(L.s006);
         unawaited(stopScan());
       },
       onDone: () => unawaited(stopScan()),
@@ -174,8 +171,10 @@ class AppController extends ChangeNotifier {
     scanning = false;
     if (!connected && !connecting) {
       status = found.isEmpty
-          ? 'Keine Geräte gefunden'
-          : '${found.length} Geräte gefunden';
+          ? L.s007
+          : (L.italian
+                ? "${found.length} dispositivi trovati"
+                : "${found.length} Geräte gefunden");
     }
     notifyListeners();
   }
@@ -283,7 +282,7 @@ class AppController extends ChangeNotifier {
     connecting = true;
     _initializing = true;
     active = device;
-    status = 'Verbinde und prüfe Protokoll …';
+    status = L.s009;
     notifyListeners();
     final token = _queue.generation;
     try {
@@ -293,36 +292,30 @@ class AppController extends ChangeNotifier {
       model = identify(device.name, fields.map((f) => f.service));
       connected = true;
       if (model == DeviceModel.unknown) {
-        status = 'Unbekanntes Profil · nur GATT-Diagnose';
+        status = L.s010;
         return;
       }
       await _serialized(() async {
         if (model.isQvap) {
           final f = _field(qCharacteristic, qService);
           if (f == null || !f.notify || (!f.write && !f.writeWithoutResponse)) {
-            throw StateError('QVAP-Kanal unvollständig');
+            throw StateError(L.s011);
           }
           _subscriptions.add(
-            _transport!.subscribe(f).listen(
-              (p) {
-                if (!_queue.isCurrent(token) || p.isEmpty) return;
-                final reply = _reply;
-                if (reply != null &&
-                    p[0] == _replyCommand &&
-                    !reply.isCompleted) {
-                  reply.complete(p);
-                }
-              },
-              onError: (Object _) =>
-                  _event('Benachrichtigungskanal fehlgeschlagen'),
-            ),
+            _transport!.subscribe(f).listen((p) {
+              if (!_queue.isCurrent(token) || p.isEmpty) return;
+              final reply = _reply;
+              if (reply != null &&
+                  p[0] == _replyCommand &&
+                  !reply.isCompleted) {
+                reply.complete(p);
+              }
+            }, onError: (Object _) => _event(L.s012)),
           );
           // Only firmware query is permitted before proving application mode.
           await _exchange(QvapCodec.firmware());
           if (data['applicationMode'] != true) {
-            throw StateError(
-              'Update-Modus oder ungültige Firmware. Nutze die Hersteller-App. Steuerung gesperrt.',
-            );
+            throw StateError(L.s013);
           }
           await _exchange(QvapCodec.status());
           await _exchange(QvapCodec.settings());
@@ -338,13 +331,9 @@ class AppController extends ChangeNotifier {
             final prefix = f.id.substring(0, 8);
             if (!AttributeCodec.fields(model).contains(prefix)) continue;
             _subscriptions.add(
-              _transport!.subscribe(f).listen(
-                (p) {
-                  if (_queue.isCurrent(token)) _decodeAttribute(f, p);
-                },
-                onError: (Object _) =>
-                    _event('Live-Meldungen fehlen; Abfrage bleibt aktiv'),
-              ),
+              _transport!.subscribe(f).listen((p) {
+                if (_queue.isCurrent(token)) _decodeAttribute(f, p);
+              }, onError: (Object _) => _event(L.s014)),
             );
           }
         }
@@ -363,10 +352,8 @@ class AppController extends ChangeNotifier {
         );
         await _persist();
       }
-      status = demo
-          ? 'Demo verbunden · simulierte Werte'
-          : 'Verbunden · Hardwareprüfung ausstehend';
-      _event(demo ? 'Demo verbunden' : 'BLE verbunden, Profil erkannt');
+      status = demo ? L.s015 : L.s016;
+      _event(demo ? L.s017 : L.s018);
       _poll = Timer.periodic(
         Duration(seconds: model.isQvap ? 1 : 2),
         (_) => unawaited(refresh()),
@@ -374,7 +361,7 @@ class AppController extends ChangeNotifier {
     } catch (e) {
       if (_queue.isCurrent(token)) {
         error = '$e';
-        await disconnect(message: 'Verbindung nicht freigegeben');
+        await disconnect(message: L.s019);
       }
     } finally {
       if (_queue.isCurrent(token)) {
@@ -388,7 +375,7 @@ class AppController extends ChangeNotifier {
   Future<void> _exchange(BleCommand command) async {
     _checkSession();
     if (command.bytes.first != 2 && data['applicationMode'] != true) {
-      throw StateError('Anwendungsmodus nicht bestätigt');
+      throw StateError(L.s020);
     }
     final token = _queue.generation;
     final waiter = Completer<List<int>>();
@@ -403,7 +390,7 @@ class AppController extends ChangeNotifier {
     try {
       await _write(command);
       final bytes = await response;
-      if (!_queue.isCurrent(token)) throw StateError('Verbindung geändert');
+      if (!_queue.isCurrent(token)) throw StateError(L.s021);
       final decoded = QvapCodec.decode(bytes);
       if (bytes[0] == 6) data.remove('permanentBoost');
       data.addAll(decoded);
@@ -424,7 +411,7 @@ class AppController extends ChangeNotifier {
     _checkSession();
     final f = _field(command.characteristic, command.service);
     if (f == null || (!f.write && !f.writeWithoutResponse)) {
-      throw StateError('Belegtes Schreibmerkmal fehlt');
+      throw StateError(L.s022);
     }
     await _transport!
         .write(f, command.bytes)
@@ -439,7 +426,7 @@ class AppController extends ChangeNotifier {
       }
       notifyListeners();
     } on FormatException {
-      _event('Ungültiger BLE-Wert verworfen');
+      _event(L.s023);
     }
   }
 
@@ -469,7 +456,11 @@ class AppController extends ChangeNotifier {
       } on TimeoutException {
         rethrow;
       } catch (_) {
-        _event('Optionales Merkmal nicht lesbar: $prefix');
+        _event(
+          (L.italian
+              ? "Caratteristica opzionale non leggibile: $prefix"
+              : "Optionales Merkmal nicht lesbar: $prefix"),
+        );
       }
     }
   }
@@ -499,11 +490,11 @@ class AppController extends ChangeNotifier {
           await _readAttributes(all: analysis);
         }
       });
-      if (analysis) _event('Diagnosedaten aktualisiert');
+      if (analysis) _event(L.s025);
     } catch (_) {
       if (_queue.isCurrent(token)) {
-        error = 'Keine verlässliche Antwort. Bitte erneut verbinden.';
-        await disconnect(message: 'Verbindung unterbrochen');
+        error = L.s026;
+        await disconnect(message: L.s027);
       }
     } finally {
       _polling = false;
@@ -517,8 +508,7 @@ class AppController extends ChangeNotifier {
     bool Function()? confirmed,
   }) async {
     if (!enabled(feature)) {
-      error =
-          'Diese Funktion ist für das aktuelle Geräteprofil nicht freigegeben.';
+      error = L.s028;
       notifyListeners();
       return;
     }
@@ -530,7 +520,7 @@ class AppController extends ChangeNotifier {
       await _serialized(() async {
         // Recheck immediately before the operation, not just before queueing.
         if (!supports(feature) || !_queue.isCurrent(token)) {
-          throw StateError('Gerätestatus nicht aktuell');
+          throw StateError(L.s029);
         }
         await action();
         if (!_queue.isCurrent(token)) return;
@@ -547,17 +537,20 @@ class AppController extends ChangeNotifier {
         }
         if (!_queue.isCurrent(token)) return;
         if (confirmed != null && !confirmed()) {
-          throw StateError('Rücklesewert weicht ab');
+          throw StateError(L.s030);
         }
       });
       if (_queue.isCurrent(token)) {
-        _event('Gerätestatus nach Befehl bestätigt: $feature');
+        _event(
+          (L.italian
+              ? "Stato confermato dopo il comando: $feature"
+              : "Gerätestatus nach Befehl bestätigt: $feature"),
+        );
       }
     } catch (_) {
       if (_queue.isCurrent(token)) {
-        error =
-            'Befehl nicht sicher bestätigt. Gerätezustand vor Ort prüfen. Kein automatischer Wiederholungsversuch.';
-        await disconnect(message: 'Steuerung angehalten');
+        error = L.s032;
+        await disconnect(message: L.s033);
       }
     } finally {
       busy = false;
@@ -598,7 +591,7 @@ class AppController extends ChangeNotifier {
         await _exchange(QvapCodec.boost(value, superboost: superboost));
       } else {
         if ((data['target'] as num? ?? 210) + value > 210) {
-          throw RangeError('Basis + Boost darf 210 °C nicht überschreiten');
+          throw RangeError(L.s034);
         }
         await _write(AttributeCodec.boost(model, value));
       }
@@ -656,9 +649,7 @@ class AppController extends ChangeNotifier {
       confirmed: () => data['target'] == 180,
     );
     if (connected && error.isEmpty) {
-      _event(
-        'Reset gesendet; Basis 180 °C rückgelesen. Weitere Einstellungen neu ausgelesen.',
-      );
+      _event(L.s035);
     }
   }
 
@@ -694,7 +685,7 @@ class AppController extends ChangeNotifier {
 
   Future<void> reconnect(SavedDevice device) =>
       connect(NearbyDevice(device.id, device.name, 0, []));
-  Future<void> disconnect({String message = 'Nicht verbunden'}) async {
+  Future<void> disconnect({String message = L.s036}) async {
     _queue.invalidate();
     _poll?.cancel();
     _poll = null;
@@ -709,7 +700,7 @@ class AppController extends ChangeNotifier {
     _subscriptions.clear();
     final pending = _reply;
     if (pending != null && !pending.isCompleted) {
-      pending.completeError(StateError('Verbindung getrennt'));
+      pending.completeError(StateError(L.s037));
     }
     _reply = null;
     _replyCommand = null;
@@ -724,7 +715,7 @@ class AppController extends ChangeNotifier {
   }
 
   String diagnosticReport() => const JsonEncoder.withIndent('  ').convert({
-    'app': 'SB CONTROL 0.3.2',
+    'app': L.s038,
     'generatedAt': DateTime.now().toUtc().toIso8601String(),
     'mode': demo ? 'simulation' : 'native',
     'model': model.label,
@@ -736,7 +727,7 @@ class AppController extends ChangeNotifier {
     },
     'gatt': fields.map((f) => f.toJson()).toList(),
     'events': log,
-    'privacy': 'Device name, identifier and serial number omitted.',
+    'privacy': L.s039,
   });
   Future<void> shutdown() async {
     await disconnect();

@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'models.dart';
@@ -18,14 +19,14 @@ List<int> le(int number, int width) {
   if ((width != 2 && width != 4) ||
       number < 0 ||
       number >= (1 << (width * 8))) {
-    throw RangeError('Ungültiger Ganzzahlwert');
+    throw RangeError(L.s040);
   }
   return List.generate(width, (i) => (number >> (i * 8)) & 255);
 }
 
 int uint16(List<int> bytes, [int offset = 0]) {
   if (bytes.length < offset + 2) {
-    throw const FormatException('BLE-Wert zu kurz');
+    throw const FormatException(L.s041);
   }
   return bytes[offset] | (bytes[offset + 1] << 8);
 }
@@ -141,7 +142,7 @@ class QvapCodec {
   static BleCommand permanentBoost(bool value) =>
       _packet(6, 7, {1: 16, 6: value ? 1 : 0});
   static BleCommand boostVisualization(DeviceModel model, bool value) {
-    if (!model.isQvap) throw UnsupportedError('Nur QVAP');
+    if (!model.isQvap) throw UnsupportedError(L.s042);
     final bit = model == DeviceModel.veazy ? !value : value;
     return _packet(1, 20, {1: 128, 14: bit ? 64 : 0, 15: 64});
   }
@@ -150,17 +151,17 @@ class QvapCodec {
 
   static BleCommand permanentBluetooth(DeviceModel model, bool value) {
     if (model != DeviceModel.veazy) {
-      throw UnsupportedError('Nur für VEAZY belegt');
+      throw UnsupportedError(L.s043);
     }
     return _packet(1, 20, {1: 128, 16: value ? 1 : 0, 17: 1});
   }
 
   static Map<String, Object?> decode(List<int> p) {
-    if (p.isEmpty) throw const FormatException('Leere Antwort');
+    if (p.isEmpty) throw const FormatException(L.s044);
     switch (p[0]) {
       case 2:
         if (p.length < 19) {
-          throw const FormatException('Firmware-Antwort zu kurz');
+          throw const FormatException(L.s045);
         }
         return {
           'firmware': asciiBytes(p.sublist(2, 8)),
@@ -170,11 +171,11 @@ class QvapCodec {
         };
       case 1:
         if (p.length < 15) {
-          throw const FormatException('Status-Antwort zu kurz');
+          throw const FormatException(L.s046);
         }
         final rawCurrent = uint16(p, 2), rawTarget = uint16(p, 4);
         if (rawTarget < 400 || rawTarget > 2100 || p[8] > 100 || p[11] > 3) {
-          throw const FormatException('Unplausibler Gerätestatus');
+          throw const FormatException(L.s047);
         }
         return {
           'current': rawCurrent >= 0x8000 || rawCurrent > 3000
@@ -195,18 +196,18 @@ class QvapCodec {
           if (p.length >= 17) 'permanentBluetooth': (p[16] & 1) != 0,
         };
       case 3:
-        if (p.length < 3) throw const FormatException('Analyse zu kurz');
+        if (p.length < 3) throw const FormatException(L.s048);
         return {'errorCode': p[1], 'errorCategory': p[2], 'fault': p[2] == 4};
       case 4:
-        if (p.length < 7) throw const FormatException('Laufzeit zu kurz');
+        if (p.length < 7) throw const FormatException(L.s049);
         return {'runtimeMinutes': p[1] | p[2] << 8 | p[3] << 16};
       case 5:
-        if (p.length < 18) throw const FormatException('Gerätedaten zu kurz');
+        if (p.length < 18) throw const FormatException(L.s050);
         return {
           'serial': asciiBytes([...p.sublist(15, 17), ...p.sublist(9, 15)]),
         };
       case 6:
-        if (p.length < 6) throw const FormatException('Einstellungen zu kurz');
+        if (p.length < 6) throw const FormatException(L.s051);
         return {
           'brightness': p[2],
           'vibration': p[5] != 0,
@@ -230,7 +231,7 @@ class AttributeCodec {
       '$prefix${m.isCrafty ? craftyBase : sbBase}';
   static BleCommand _command(DeviceModel m, String prefix, List<int> bytes) {
     if (!m.isCrafty && m != DeviceModel.volcanoHybrid) {
-      throw UnsupportedError('Unbekannte Familie');
+      throw UnsupportedError(L.s052);
     }
     return BleCommand(
       service(m, prefix),
@@ -259,7 +260,7 @@ class AttributeCodec {
   static BleCommand pump(bool on) =>
       _command(DeviceModel.volcanoHybrid, on ? '10110013' : '10110014', [0]);
   static BleCommand boost(DeviceModel m, int value) {
-    if (!m.isCrafty) throw UnsupportedError('Kein CRAFTY');
+    if (!m.isCrafty) throw UnsupportedError(L.s053);
     within(value, 1, 99);
     return _command(m, '00000031', le(value * 10, 2));
   }
@@ -284,7 +285,7 @@ class AttributeCodec {
   }) {
     if (m.isCrafty) {
       if (freshRegister == null) {
-        throw StateError('Frischer Registerwert erforderlich');
+        throw StateError(L.s054);
       }
       return _command(
         m,
@@ -310,7 +311,7 @@ class AttributeCodec {
           };
     if (names.containsKey(id)) return {names[id]!: asciiBytes(p)};
     if (id == '00000072') {
-      if (p.length < 3) throw const FormatException('BLE-Firmware zu kurz');
+      if (p.length < 3) throw const FormatException(L.s055);
       return {'bleFirmware': '${p[0]}.${p[1]}.${p[2]}'};
     }
     if (id == '10100015' || id == '10100016') return {'raw.$id': hexBytes(p)};
@@ -323,18 +324,18 @@ class AttributeCodec {
         final raw = v / 10;
         final t = raw > 210 ? (raw - 32) / 1.8 : raw;
         if (t < 40 || t > 210.1) {
-          throw const FormatException('Solltemperatur ungültig');
+          throw const FormatException(L.s056);
         }
         return {'target': t, 'craftyFahrenheit': raw > 210};
       case '10110003':
         if (v < 400 || v > 2300) {
-          throw const FormatException('Solltemperatur ungültig');
+          throw const FormatException(L.s056);
         }
         return {'target': v / 10};
       case '00000031':
         return {'boost': (v / 10).round()};
       case '00000041':
-        if (v > 100) throw const FormatException('Akkustand ungültig');
+        if (v > 100) throw const FormatException(L.s057);
         return {'battery': v};
       case '00000051':
       case '10110005':
