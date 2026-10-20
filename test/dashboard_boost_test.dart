@@ -33,7 +33,8 @@ void main() {
     expect(boost, findsOneWidget);
     expect(superboost, findsOneWidget);
     final before = c.data['boost'];
-    await tester.ensureVisible(boost);
+    await tester.drag(find.byType(ListView).first, const Offset(0, -400));
+    await tester.pumpAndSettle();
     await tester.drag(
       find.descendant(of: boost, matching: find.byType(Slider)),
       const Offset(35, 0),

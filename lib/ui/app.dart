@@ -251,7 +251,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
             width: double.infinity,
             child: FilledButton.icon(
               onPressed: c.connecting ? null : () => setState(() => tab = 1),
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.add, color: canvas),
               label: const Text(L.s064),
             ),
           ),
@@ -328,13 +328,25 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                         bottom: 0,
                         width: 190,
                         child: ExcludeSemantics(
-                          child: Image.asset(
-                            'assets/art/${c.model == DeviceModel.unknown
-                                ? 'icon'
-                                : c.model.isCrafty
-                                ? 'crafty'
-                                : c.model.name}.webp',
-                            fit: BoxFit.contain,
+                          child: ShaderMask(
+                            blendMode: BlendMode.dstIn,
+                            shaderCallback: (rect) => const RadialGradient(
+                              colors: [
+                                Colors.white,
+                                Colors.white,
+                                Colors.transparent,
+                              ],
+                              stops: [0, .6, 1],
+                              radius: .85,
+                            ).createShader(rect),
+                            child: Image.asset(
+                              'assets/art/${c.model == DeviceModel.unknown
+                                  ? 'icon'
+                                  : c.model.isCrafty
+                                  ? 'crafty'
+                                  : c.model.name}.webp',
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ),
@@ -419,7 +431,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                         ? () => c.setTarget(target.round() - 1)
                         : null,
                     tooltip: L.s077,
-                    icon: const Icon(Icons.remove),
+                    icon: const Icon(Icons.remove, color: canvas),
                   ),
                   Expanded(child: TargetSlider(controller: c)),
                   IconButton.filledTonal(
@@ -430,7 +442,7 @@ class _ControlHomeState extends State<ControlHome> with WidgetsBindingObserver {
                         ? () => c.setTarget(target.round() + 1)
                         : null,
                     tooltip: L.s078,
-                    icon: const Icon(Icons.add),
+                    icon: const Icon(Icons.add, color: canvas),
                   ),
                 ],
               ),

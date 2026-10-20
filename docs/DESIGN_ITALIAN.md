@@ -50,3 +50,18 @@ truncated cone with dark display base. Complete centered devices, orange rim lig
 near-black background, no logos, text, smoke or props. Icon prompt groups two black
 ribbed portables and one brushed-metal cone with strong small-size silhouette.
 These are decorative images only, never used for cleaning instructions.
+
+## Validation for this revision
+
+- 56 manufacturer-vector/protocol core checks passed locally.
+- Existing German controller/care/layout tests passed; the new dashboard gesture
+  test passed after scrolling its real slider into the test viewport.
+- Both Italian tests passed: five model layouts at 320 px and cleaning guide
+  coverage/limits. The test-only simulator does not claim real BLE validation.
+- Flutter analyze: no issues. Italian release web compilation succeeded.
+- CI repeats the German suite, Italian suite, analyze and the native Android build
+  before producing the APK. See the PR checks for the final build result.
+- Compiled Italian web UI browser checks passed: heating button, all five device
+  illustrations, 320 px layout; VENTY illustrated guide, dry-parts confirmation,
+  saved cleaning, reminder opt-in, persistence after reload, global notifications
+  off, and HYBRID guide. No JavaScript errors, missing assets or external requests.
