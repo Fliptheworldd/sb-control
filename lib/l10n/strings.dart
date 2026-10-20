@@ -742,13 +742,13 @@ abstract final class L {
       ? "La caratteristica non supporta la scrittura"
       : "Merkmal unterstützt keine Schreibzugriffe";
   static const s311 = italian ? "Annulla" : "Abbrechen";
-  static const s312 = italian ? "Spegnimento" : "Abschaltung";
+  static const s312 = italian ? "Stop tra" : "Abschaltung";
   static const s313 = italian ? "Batteria" : "Akku";
   static const s314 = italian ? "Codice analisi" : "Analysecode";
   static const s315 = italian ? "Riscalda" : "Aufheizen";
   static const s316 = italian ? "Da completare" : "Ausstehend";
   static const s317 = italian ? "Pronto" : "Bereit";
-  static const s318 = italian ? "Ore di utilizzo" : "Betriebszeit";
+  static const s318 = italian ? "Utilizzo" : "Betriebszeit";
   static const s319 = italian ? "Servizi Bluetooth" : "Bluetooth-Dienste";
   static const s320 = italian ? "Boost" : "Boost-Offset";
   static const s321 = italian ? "Origine dati" : "Datenquelle";
@@ -765,7 +765,7 @@ abstract final class L {
   static const s330 = italian ? "Temperatura attuale" : "Isttemperatur";
   static const s331 = italian ? "Limite di ricarica" : "Ladelimit";
   static const s332 = italian ? "Modello" : "Modell";
-  static const s333 = italian ? "Alimentazione di rete" : "Netzbetrieb";
+  static const s333 = italian ? "Rete" : "Netzbetrieb";
   static const s334 = italian ? "Opzioni" : "Optionen";
   static const s335 = italian ? "CURA" : "PFLEGE";
   static const s336 = italian ? "Cura" : "Pflege";
@@ -782,7 +782,7 @@ abstract final class L {
   static const s345 = italian ? "REGISTRO CONNESSIONE" : "VERBINDUNGSPROTOKOLL";
   static const s346 = italian ? "CONNESSO" : "VERBUNDEN";
   static const s347 = italian ? "Connesso" : "Verbunden";
-  static const s348 = italian ? "Alimentazione" : "Versorgung";
+  static const s348 = italian ? "Energia" : "Versorgung";
   static const s349 = italian ? "Vibrazione" : "Vibration";
   static const s350 = italian ? "Avanti" : "Weiter";
   static const s351 = italian ? "TEMPERATURA IMPOSTATA" : "ZIELTEMPERATUR";
